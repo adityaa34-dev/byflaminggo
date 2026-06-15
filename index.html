@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Byflaminggo — Elegance in Every Step</title>
+<link rel="icon" type="image/jpeg" href="byflaminggo.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rose: #E8706A;
+    --rose-light: #F2A5A0;
+    --rose-pale: #FAF0EF;
+    --rose-dark: #C45550;
+    --charcoal: #1C1C1C;
+    --gray: #9E9E9E;
+    --gray-light: #F5F5F5;
+    --white: #FAFAFA;
+    --border: rgba(0,0,0,0.08);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--charcoal); font-size: 15px; line-height: 1.6; font-weight: 400; -webkit-font-smoothing: antialiased; }
+
+  /* ── PAGES ── */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(250,250,250,0.96);
+    backdrop-filter: blur(8px);
+    border-bottom: 0.5px solid var(--border);
+    padding: 0 40px;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px;
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-weight: 400; letter-spacing: 0.12em;
+    color: var(--charcoal); cursor: pointer; text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .nav-logo span { color: var(--rose); }
+  .logo-img {
+    height: 36px;
+    width: auto;
+    object-fit: contain;
+  }
+  .nav-links { display: flex; gap: 32px; align-items: center; }
+  .nav-links a {
+    text-decoration: none; color: var(--charcoal); font-size: 13px;
+    letter-spacing: 0.06em; font-weight: 500;
+    opacity: 0.7; transition: opacity 0.2s;
+  }
+  .nav-links a:hover, .nav-links a.active { opacity: 1; }
+  .nav-cta {
+    background: var(--rose); color: white !important; opacity: 1 !important;
+    padding: 8px 20px; border-radius: 2px; font-size: 12px !important;
+    letter-spacing: 0.1em; transition: background 0.2s !important;
+  }
+  .nav-cta:hover { background: var(--rose-dark) !important; }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+  .hamburger span { display: block; width: 22px; height: 1.5px; background: var(--charcoal); }
+  .mobile-menu {
+    display: none; position: fixed; top: 64px; left: 0; right: 0; bottom: 0;
+    background: var(--white); z-index: 99; flex-direction: column;
+    align-items: center; justify-content: center; gap: 40px;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    font-size: 22px; text-decoration: none; color: var(--charcoal);
+    font-family: 'Cormorant Garamond', serif; font-weight: 300;
+    letter-spacing: 0.1em;
+  }
+
+  /* ── HOME PAGE ── */
+  .hero {
+    height: calc(100vh - 64px);
+    display: flex; align-items: center; justify-content: center;
+    text-align: center;
+    background: linear-gradient(160deg, #fff 0%, var(--rose-pale) 100%);
+    padding: 40px;
+    position: relative; overflow: hidden;
+  }
+  .hero-bg-text {
+    position: absolute; font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(100px, 20vw, 200px); font-weight: 300;
+    color: rgba(232,112,106,0.06); letter-spacing: 0.1em;
+    user-select: none; pointer-events: none; top: 50%; transform: translateY(-50%);
+    white-space: nowrap;
+  }
+  .hero-content { position: relative; z-index: 1; }
+  .hero-eyebrow {
+    font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--rose); margin-bottom: 24px;
+  }
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(42px, 8vw, 88px); font-weight: 300; line-height: 1.05;
+    margin-bottom: 24px; color: var(--charcoal);
+  }
+  .hero-title em { font-style: italic; color: var(--rose); }
+  .hero-sub {
+    font-size: 15px; color: var(--gray); max-width: 400px;
+    margin: 0 auto 40px; line-height: 1.8;
+  }
+  .btn-primary {
+    display: inline-block; background: var(--charcoal); color: white;
+    padding: 14px 40px; font-size: 12px; letter-spacing: 0.15em;
+    text-transform: uppercase; text-decoration: none; border: none;
+    cursor: pointer; transition: background 0.2s; font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+  }
+  .btn-primary:hover { background: var(--rose); }
+  .btn-outline {
+    display: inline-block; background: transparent; color: var(--charcoal);
+    padding: 13px 40px; font-size: 12px; letter-spacing: 0.15em;
+    text-transform: uppercase; text-decoration: none;
+    border: 0.5px solid var(--charcoal); cursor: pointer;
+    transition: all 0.2s; font-family: 'DM Sans', sans-serif;
+    margin-left: 16px;
+    font-weight: 500;
+  }
+  .btn-outline:hover { background: var(--charcoal); color: white; }
+
+  /* featured */
+  .section { padding: 100px 40px; }
+  .section-label {
+    font-size: 10px; letter-spacing: 0.35em; text-transform: uppercase;
+    color: var(--rose); margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(30px, 4vw, 46px); font-weight: 300;
+    margin-bottom: 56px; color: var(--charcoal);
+  }
+  .paintings-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 32px;
+  }
+  .painting-card {
+    cursor: pointer; group: true;
+  }
+  .painting-card-img {
+    aspect-ratio: 3/4; overflow: hidden; margin-bottom: 16px;
+    background: var(--gray-light);
+  }
+  .painting-card-img img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+  .painting-card:hover .painting-card-img img { transform: scale(1.04); }
+  .painting-card-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 19px; font-weight: 400; margin-bottom: 4px;
+  }
+  .painting-card-meta { font-size: 12px; color: var(--gray); letter-spacing: 0.04em; }
+  .painting-card-price { font-size: 14px; color: var(--rose); margin-top: 6px; font-weight: 500; }
+
+  /* mood section */
+  .mood-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 2px;
+  }
+  .mood-tile {
+    aspect-ratio: 1; position: relative; overflow: hidden; cursor: pointer;
+    background: var(--gray-light);
+  }
+  .mood-tile img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+  .mood-tile:hover img { transform: scale(1.06); }
+  .mood-tile-label {
+    position: absolute; inset: 0; background: rgba(28,28,28,0.42);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif; font-size: 20px;
+    font-weight: 300; color: white; letter-spacing: 0.12em;
+    transition: background 0.3s;
+  }
+  .mood-tile:hover .mood-tile-label { background: rgba(232,112,106,0.55); }
+
+  /* how it works */
+  .hiw-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px; }
+  .hiw-step { text-align: center; }
+  .hiw-num {
+    font-family: 'Cormorant Garamond', serif; font-size: 56px; font-weight: 300;
+    color: var(--rose-pale); line-height: 1; margin-bottom: 16px;
+    -webkit-text-stroke: 1px var(--rose-light);
+  }
+  .hiw-step h3 {
+    font-family: 'Cormorant Garamond', serif; font-size: 22px;
+    font-weight: 400; margin-bottom: 8px;
+  }
+  .hiw-step p { font-size: 13px; color: var(--gray); line-height: 1.8; }
+
+  /* insta strip */
+  .insta-strip { display: flex; gap: 2px; overflow: hidden; }
+  .insta-strip-item {
+    flex: 1; aspect-ratio: 1; overflow: hidden; background: var(--gray-light);
+    min-width: 120px;
+  }
+  .insta-strip-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
+  .insta-strip-item:hover img { transform: scale(1.05); }
+
+  /* ── CATALOGUE PAGE ── */
+  .catalogue-header {
+    padding: 60px 40px 32px;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .catalogue-header h1 {
+    font-family: 'Cormorant Garamond', serif; font-size: 48px; font-weight: 300;
+  }
+  .catalogue-header p { color: var(--gray); font-size: 14px; margin-top: 8px; }
+  .catalogue-layout { display: flex; gap: 40px; padding: 40px; align-items: flex-start; }
+  .filters { width: 220px; flex-shrink: 0; position: sticky; top: 84px; }
+  .filter-group { margin-bottom: 32px; }
+  .filter-title {
+    font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--charcoal); margin-bottom: 14px; font-weight: 500;
+  }
+  .filter-option {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
+    cursor: pointer; font-size: 13px; color: var(--charcoal);
+    user-select: none;
+  }
+  .filter-option input[type=checkbox] { accent-color: var(--rose); width: 14px; height: 14px; }
+  .price-range { width: 100%; accent-color: var(--rose); margin-bottom: 6px; }
+  .price-labels { display: flex; justify-content: space-between; font-size: 12px; color: var(--gray); }
+  .color-dots { display: flex; flex-wrap: wrap; gap: 8px; }
+  .color-dot {
+    width: 24px; height: 24px; border-radius: 50%; cursor: pointer;
+    border: 2px solid transparent; transition: border-color 0.2s;
+  }
+  .color-dot.active, .color-dot:hover { border-color: var(--charcoal); }
+  .sort-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 28px; flex-wrap: wrap; gap: 12px;
+  }
+  .sort-count { font-size: 13px; color: var(--gray); }
+  .sort-select {
+    border: 0.5px solid var(--border); padding: 7px 14px;
+    font-size: 13px; background: white; font-family: 'DM Sans', sans-serif;
+    color: var(--charcoal); cursor: pointer;
+  }
+  .catalogue-grid {
+    flex: 1;
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 28px;
+  }
+
+  /* ── DETAIL PAGE ── */
+  .detail-layout {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+    padding: 60px 40px; max-width: 1200px; margin: 0 auto;
+  }
+  .detail-img-main {
+    aspect-ratio: 3/4; background: var(--gray-light);
+    overflow: hidden; cursor: zoom-in;
+  }
+  .detail-img-main img { width: 100%; height: 100%; object-fit: cover; }
+  .detail-info { padding-top: 20px; }
+  .detail-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+  .tag {
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    border: 0.5px solid var(--border); padding: 5px 12px; color: var(--gray);
+  }
+  .detail-title {
+    font-family: 'Cormorant Garamond', serif; font-size: 40px;
+    font-weight: 300; line-height: 1.1; margin-bottom: 16px;
+  }
+  .detail-price { font-size: 26px; color: var(--rose); margin-bottom: 28px; font-weight: 400; }
+  .detail-meta { border-top: 0.5px solid var(--border); padding-top: 24px; margin-bottom: 32px; }
+  .detail-meta-row {
+    display: flex; justify-content: space-between;
+    padding: 10px 0; border-bottom: 0.5px solid var(--border);
+    font-size: 13px;
+  }
+  .detail-meta-row span:first-child { color: var(--gray); }
+  .detail-desc { font-size: 14px; line-height: 1.9; color: var(--charcoal); margin-bottom: 36px; opacity: 0.8; }
+  .wa-btn {
+    display: flex; align-items: center; gap: 12px; justify-content: center;
+    background: #25D366; color: white; padding: 16px 32px;
+    font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase;
+    cursor: pointer; border: none; width: 100%;
+    font-family: 'DM Sans', sans-serif; transition: background 0.2s;
+    text-decoration: none;
+  }
+  .wa-btn:hover { background: #1dbe5a; }
+  .share-row { display: flex; gap: 12px; margin-top: 16px; }
+  .share-btn {
+    flex: 1; padding: 11px; border: 0.5px solid var(--border);
+    background: transparent; cursor: pointer; font-size: 12px;
+    letter-spacing: 0.1em; color: var(--charcoal);
+    font-family: 'DM Sans', sans-serif; transition: all 0.2s;
+    text-decoration: none; text-align: center; text-transform: uppercase;
+  }
+  .share-btn:hover { background: var(--gray-light); }
+  .related { padding: 80px 40px; border-top: 0.5px solid var(--border); }
+
+  /* ── CONTACT PAGE ── */
+  .contact-wrap {
+    max-width: 640px; margin: 0 auto; padding: 100px 40px;
+    text-align: center;
+  }
+  .contact-title {
+    font-family: 'Cormorant Garamond', serif; font-size: 52px;
+    font-weight: 300; margin-bottom: 20px; line-height: 1.1;
+  }
+  .contact-sub { font-size: 15px; color: var(--gray); margin-bottom: 56px; line-height: 1.8; }
+  .contact-wa {
+    display: flex; align-items: center; gap: 14px; justify-content: center;
+    background: #25D366; color: white; padding: 20px 48px;
+    font-size: 15px; letter-spacing: 0.08em; cursor: pointer;
+    text-decoration: none; transition: background 0.2s; margin-bottom: 24px;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .contact-wa:hover { background: #1dbe5a; }
+  .contact-links { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; margin-top: 48px; }
+  .contact-link {
+    font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--charcoal); text-decoration: none; border-bottom: 0.5px solid var(--border);
+    padding-bottom: 2px; transition: color 0.2s, border-color 0.2s;
+  }
+  .contact-link:hover { color: var(--rose); border-color: var(--rose); }
+  .faq { text-align: left; margin-top: 80px; border-top: 0.5px solid var(--border); padding-top: 60px; }
+  .faq-item { margin-bottom: 32px; }
+  .faq-q {
+    font-family: 'Cormorant Garamond', serif; font-size: 20px;
+    margin-bottom: 8px; font-weight: 400;
+  }
+  .faq-a { font-size: 14px; color: var(--gray); line-height: 1.8; }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 0.5px solid var(--border); padding: 48px 40px;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 20px;
+  }
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif; font-size: 18px;
+    color: var(--charcoal); letter-spacing: 0.12em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .footer-logo span { color: var(--rose); }
+  .logo-img-footer {
+    height: 26px;
+    width: auto;
+    object-fit: contain;
+  }
+  .footer-tagline { font-size: 11px; letter-spacing: 0.2em; color: var(--gray); margin-top: 4px; }
+  .footer-links { display: flex; gap: 28px; }
+  .footer-links a { font-size: 12px; color: var(--gray); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--rose); }
+  .footer-copy { font-size: 11px; color: var(--gray); margin-top: 4px; }
+
+  /* ── WA FLOAT ── */
+  .wa-float {
+    position: fixed; bottom: 32px; right: 32px; z-index: 200;
+    background: #25D366; width: 56px; height: 56px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 20px rgba(37,211,102,0.35);
+    cursor: pointer; text-decoration: none; transition: transform 0.2s;
+  }
+  .wa-float:hover { transform: scale(1.08); }
+  .wa-float svg { width: 28px; height: 28px; fill: white; }
+
+  /* ── ADMIN PAGE ── */
+  .admin-wrap { padding: 40px; max-width: 1000px; margin: 0 auto; }
+  .admin-header {
+    border-bottom: 0.5px solid var(--border); padding-bottom: 24px;
+    margin-bottom: 40px;
+  }
+  .admin-header h1 {
+    font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 300;
+  }
+  .admin-header p { font-size: 13px; color: var(--gray); margin-top: 4px; }
+  .admin-tabs { display: flex; gap: 0; margin-bottom: 40px; border-bottom: 0.5px solid var(--border); justify-content: space-between; align-items: center; }
+  .admin-tab {
+    padding: 12px 24px; font-size: 13px; cursor: pointer;
+    border-bottom: 2px solid transparent; color: var(--gray);
+    transition: all 0.2s; font-family: 'DM Sans', sans-serif;
+    background: none; border-left: none; border-right: none; border-top: none;
+  }
+  .admin-tab.active { color: var(--rose); border-bottom-color: var(--rose); }
+  .admin-section { display: none; }
+  .admin-section.active { display: block; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-group label { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gray); }
+  .form-group input, .form-group select, .form-group textarea {
+    border: 0.5px solid var(--border); padding: 10px 14px;
+    font-size: 14px; font-family: 'DM Sans', sans-serif;
+    color: var(--charcoal); background: white;
+    transition: border-color 0.2s;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    outline: none; border-color: var(--rose);
+  }
+  .form-group.full { grid-column: 1 / -1; }
+  .add-btn {
+    background: var(--rose); color: white; border: none;
+    padding: 12px 32px; font-size: 13px; letter-spacing: 0.1em;
+    text-transform: uppercase; cursor: pointer; margin-top: 24px;
+    font-family: 'DM Sans', sans-serif; transition: background 0.2s;
+    font-weight: 500;
+  }
+  .add-btn:hover { background: var(--rose-dark); }
+  .paintings-admin-list { display: grid; gap: 12px; }
+  .admin-painting-row {
+    display: flex; align-items: center; gap: 16px;
+    border: 0.5px solid var(--border); padding: 12px 16px; background: white;
+  }
+  .admin-painting-row img { width: 60px; height: 72px; object-fit: cover; background: var(--gray-light); }
+  .admin-painting-row img.placeholder { background: var(--rose-pale); }
+  .admin-row-info { flex: 1; }
+  .admin-row-name { font-size: 14px; font-weight: 500; margin-bottom: 2px; }
+  .admin-row-meta { font-size: 12px; color: var(--gray); }
+  .admin-row-actions { display: flex; gap: 8px; }
+  .admin-edit-btn, .admin-del-btn {
+    padding: 6px 14px; font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase; cursor: pointer; border: 0.5px solid var(--border);
+    background: transparent; font-family: 'DM Sans', sans-serif;
+  }
+  .admin-del-btn { color: #c0392b; border-color: #fecaca; }
+  .admin-del-btn:hover { background: #fef2f2; }
+  .admin-edit-btn:hover { background: var(--gray-light); }
+  .site-settings-grid { display: grid; gap: 32px; }
+  .settings-card {
+    border: 0.5px solid var(--border); padding: 24px; background: white;
+  }
+  .settings-card h3 {
+    font-family: 'Cormorant Garamond', serif; font-size: 20px;
+    margin-bottom: 16px; font-weight: 400;
+  }
+  .img-url-preview {
+    width: 100%; max-height: 100px; object-fit: contain; margin-top: 8px; display: none;
+  }
+
+  /* ── MODAL / LIGHTBOX ── */
+  .lightbox {
+    display: none; position: fixed; inset: 0; z-index: 300;
+    background: rgba(0,0,0,0.85); align-items: center; justify-content: center;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; }
+  .lightbox-close {
+    position: absolute; top: 24px; right: 32px; color: white;
+    font-size: 32px; cursor: pointer; background: none; border: none; line-height: 1;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav { padding: 0 20px; }
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .section { padding: 64px 20px; }
+    .hiw-steps { grid-template-columns: 1fr; }
+    .catalogue-layout { flex-direction: column; padding: 20px; }
+    .filters { width: 100%; position: static; }
+    .detail-layout { grid-template-columns: 1fr; gap: 40px; padding: 30px 20px; }
+    .admin-wrap { padding: 20px; }
+    .form-grid { grid-template-columns: 1fr; }
+    footer { flex-direction: column; text-align: center; padding: 40px 20px; }
+    .catalogue-header { padding: 40px 20px 24px; }
+    .contact-wrap { padding: 64px 20px; }
+    .wa-float { bottom: 20px; right: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <a class="nav-logo" onclick="showPage('home')">
+    <img src="byflaminggo.jpg" alt="Byflaminggo Logo" class="logo-img">
+    by<span>flaminggo</span>
+  </a>
+  <div class="nav-links">
+    <a onclick="showPage('home')" id="nav-home" class="active">Home</a>
+    <a onclick="showPage('catalogue')" id="nav-catalogue">Collection</a>
+    <a onclick="showPage('contact')" id="nav-contact">Contact</a>
+    <a onclick="openWA('I\'d love to browse your collection!')" class="nav-cta">Enquire</a>
+  </div>
+  <div class="hamburger" onclick="toggleMobile()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a onclick="showPage('home');toggleMobile()">Home</a>
+  <a onclick="showPage('catalogue');toggleMobile()">Collection</a>
+  <a onclick="showPage('contact');toggleMobile()">Contact</a>
+  <a onclick="openWA('Hi! I want to enquire about a painting.');toggleMobile()" style="color: var(--rose);">Enquire via WhatsApp</a>
+</div>
+
+<!-- ══════════════ HOME PAGE ══════════════ -->
+<div class="page active" id="page-home">
+  <section class="hero">
+    <div class="hero-bg-text">ART</div>
+    <div class="hero-content">
+      <img src="byflaminggo.jpg" alt="Byflaminggo Logo" class="logo-img-hero" style="height: 60px; width: auto; object-fit: contain; margin-bottom: 20px; border-radius: 50%;">
+      <p class="hero-eyebrow">Byflaminggo — Elegance in Every Step</p>
+      <h1 class="hero-title">Art that <em>speaks</em><br>to your walls</h1>
+      <p class="hero-sub">Curated paintings and portraits delivered to your home. Browse, fall in love, and reach out — we'll do the rest.</p>
+      <a class="btn-primary" onclick="showPage('catalogue')">Browse Collection</a>
+      <a class="btn-outline" onclick="showPage('contact')">Get in Touch</a>
+    </div>
+  </section>
+
+  <!-- Featured -->
+  <section class="section">
+    <p class="section-label">Curated picks</p>
+    <h2 class="section-title">Featured Works</h2>
+    <div class="paintings-grid" id="home-featured"></div>
+  </section>
+
+  <!-- Mood -->
+  <section class="section" style="padding-top:0">
+    <p class="section-label">Browse by feeling</p>
+    <h2 class="section-title">Find Your Mood</h2>
+    <div class="mood-grid" id="mood-grid"></div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="section" style="background: var(--rose-pale)">
+    <p class="section-label">Simple process</p>
+    <h2 class="section-title">How It Works</h2>
+    <div class="hiw-steps">
+      <div class="hiw-step">
+        <div class="hiw-num">01</div>
+        <h3>Browse the Collection</h3>
+        <p>Explore 100+ original prints and digital artworks across every mood and style.</p>
+      </div>
+      <div class="hiw-step">
+        <div class="hiw-num">02</div>
+        <h3>Pick Your Piece</h3>
+        <p>Find something you love — note the name or save it for later.</p>
+      </div>
+      <div class="hiw-step">
+        <div class="hiw-num">03</div>
+        <h3>Contact Us on WhatsApp</h3>
+        <p>Send us a message and we'll handle pricing, sizing and delivery personally.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ══════════════ CATALOGUE PAGE ══════════════ -->
+<div class="page" id="page-catalogue">
+  <div class="catalogue-header">
+    <h1>The Collection</h1>
+    <p id="catalogue-subtitle">Explore all paintings</p>
+  </div>
+  <div class="catalogue-layout">
+    <!-- Filters -->
+    <aside class="filters">
+      <div class="filter-group">
+        <p class="filter-title">Style</p>
+        <label class="filter-option"><input type="checkbox" value="abstract" onchange="applyFilters()"> Abstract</label>
+        <label class="filter-option"><input type="checkbox" value="portrait" onchange="applyFilters()"> Portrait</label>
+        <label class="filter-option"><input type="checkbox" value="landscape" onchange="applyFilters()"> Landscape</label>
+        <label class="filter-option"><input type="checkbox" value="floral" onchange="applyFilters()"> Floral</label>
+        <label class="filter-option"><input type="checkbox" value="geometric" onchange="applyFilters()"> Geometric</label>
+      </div>
+      <div class="filter-group">
+        <p class="filter-title">Mood</p>
+        <label class="filter-option"><input type="checkbox" value="calm" onchange="applyFilters()"> Calm</label>
+        <label class="filter-option"><input type="checkbox" value="vibrant" onchange="applyFilters()"> Vibrant</label>
+        <label class="filter-option"><input type="checkbox" value="dark" onchange="applyFilters()"> Dark</label>
+        <label class="filter-option"><input type="checkbox" value="romantic" onchange="applyFilters()"> Romantic</label>
+        <label class="filter-option"><input type="checkbox" value="bold" onchange="applyFilters()"> Bold</label>
+      </div>
+      <div class="filter-group">
+        <p class="filter-title">Size</p>
+        <label class="filter-option"><input type="checkbox" value="small" onchange="applyFilters()"> Small (up to 12")</label>
+        <label class="filter-option"><input type="checkbox" value="medium" onchange="applyFilters()"> Medium (12–24")</label>
+        <label class="filter-option"><input type="checkbox" value="large" onchange="applyFilters()"> Large (24"+)</label>
+      </div>
+      <div class="filter-group">
+        <p class="filter-title">Price Range</p>
+        <input type="range" class="price-range" min="0" max="50000" value="50000" id="price-filter" oninput="updatePriceLabel(this.value); applyFilters()">
+        <div class="price-labels"><span>₹0</span><span id="price-max-label">₹50,000</span></div>
+      </div>
+      <div class="filter-group">
+        <p class="filter-title">Color Palette</p>
+        <div class="color-dots" id="color-filters">
+          <div class="color-dot" style="background:#E8706A" title="Red/Pink" onclick="toggleColor('warm')"></div>
+          <div class="color-dot" style="background:#3B82F6" title="Blue" onclick="toggleColor('cool')"></div>
+          <div class="color-dot" style="background:#10B981" title="Green" onclick="toggleColor('green')"></div>
+          <div class="color-dot" style="background:#F59E0B" title="Warm/Gold" onclick="toggleColor('golden')"></div>
+          <div class="color-dot" style="background:#1C1C1C" title="Dark/Mono" onclick="toggleColor('mono')"></div>
+          <div class="color-dot" style="background:#fff;border:0.5px solid #ccc" title="Light/White" onclick="toggleColor('light')"></div>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="clearFilters()" style="width:100%;font-size:11px;padding:10px">Clear All Filters</button>
+    </aside>
+
+    <!-- Grid -->
+    <div style="flex:1">
+      <div class="sort-bar">
+        <span class="sort-count" id="sort-count">Showing all paintings</span>
+        <select class="sort-select" onchange="applyFilters();" id="sort-select">
+          <option value="newest">Newest First</option>
+          <option value="price-asc">Price: Low to High</option>
+          <option value="price-desc">Price: High to Low</option>
+          <option value="name">Name: A–Z</option>
+        </select>
+      </div>
+      <div class="catalogue-grid" id="catalogue-grid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ DETAIL PAGE ══════════════ -->
+<div class="page" id="page-detail">
+  <div style="padding:20px 40px;border-bottom:0.5px solid var(--border)">
+    <a onclick="showPage('catalogue')" style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gray);cursor:pointer;text-decoration:none;">
+      ← Back to Collection
+    </a>
+  </div>
+  <div class="detail-layout" id="detail-content"></div>
+  <div class="related">
+    <p class="section-label">You might also like</p>
+    <h2 class="section-title" style="font-size:32px;margin-bottom:36px">Related Works</h2>
+    <div class="paintings-grid" id="related-grid" style="grid-template-columns:repeat(auto-fill,minmax(200px,1fr))"></div>
+  </div>
+</div>
+
+<!-- ══════════════ CONTACT PAGE ══════════════ -->
+<div class="page" id="page-contact">
+  <div class="contact-wrap">
+    <img src="byflaminggo.jpg" alt="Byflaminggo Logo" class="logo-img-contact" style="height: 80px; width: auto; object-fit: contain; margin-bottom: 24px; border-radius: 50%;">
+    <p class="section-label">Get in touch</p>
+    <h1 class="contact-title">Let's find your perfect piece</h1>
+    <p class="contact-sub">Interested in a painting? Have a question about sizing, shipping, or commissioning something custom? We're just a message away.</p>
+    <a class="contact-wa" id="contact-wa-btn" href="#" onclick="openWA('Hi! I\'d like to enquire about a painting from Byflaminggo.')">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.098.546 4.07 1.5 5.793L0 24l6.418-1.452A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.817 9.817 0 01-5.003-1.371l-.36-.213-3.807.862.918-3.692-.233-.38A9.818 9.818 0 012.182 12c0-5.42 4.398-9.818 9.818-9.818 5.42 0 9.818 4.398 9.818 9.818 0 5.42-4.398 9.818-9.818 9.818z"/></svg>
+      Chat with us on WhatsApp
+    </a>
+    <div class="contact-links">
+      <a class="contact-link" id="contact-insta-link" href="#" target="_blank">Instagram</a>
+      <a class="contact-link" id="contact-email-link" href="#">Email Us</a>
+    </div>
+    <div class="faq">
+      <p class="section-label">Questions</p>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;margin-bottom:40px">Frequently Asked</h2>
+      <div id="faq-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ ADMIN PAGE ══════════════ -->
+<div class="page" id="page-admin">
+  <!-- Admin Login Prompt -->
+  <div id="admin-login-box" class="admin-wrap" style="display: none; max-width: 400px; margin: 80px auto; text-align: center; border: 0.5px solid var(--border); padding: 40px 24px; background: white;">
+    <div class="admin-header" style="margin-bottom: 28px; border-bottom: none; padding-bottom: 0;">
+      <img src="byflaminggo.jpg" alt="Logo" style="height: 50px; object-fit: contain; margin-bottom: 16px;">
+      <h1 style="font-size: 26px;">Admin Login</h1>
+      <p style="font-size: 13px; color: var(--gray); margin-top: 4px;">Enter password to manage collection</p>
+    </div>
+    <div class="form-group" style="text-align: left; margin-bottom: 20px;">
+      <label>Password</label>
+      <input type="password" id="admin-pass" placeholder="••••••••" style="width: 100%;">
+    </div>
+    <button class="add-btn" onclick="submitAdminLogin()" style="width: 100%; margin-top: 8px;">Login</button>
+    <div id="login-error" style="color: var(--rose); font-size: 13px; margin-top: 12px; display: none;">Invalid password. Please try again.</div>
+  </div>
+
+  <!-- Admin Dashboard -->
+  <div id="admin-dashboard-box" class="admin-wrap" style="display: none;">
+    <div class="admin-header">
+      <h1 style="display: flex; align-items: center; gap: 12px;">
+        <img src="byflaminggo.jpg" alt="Byflaminggo Logo" style="height: 38px; width: auto; object-fit: contain;">
+        Admin Panel
+      </h1>
+      <p>Manage paintings, content, and site settings — this page is hidden from the public.</p>
+    </div>
+    <div class="admin-tabs">
+      <div style="display: flex; gap: 0;">
+        <button class="admin-tab active" onclick="switchAdminTab('add')">Add Painting</button>
+        <button class="admin-tab" onclick="switchAdminTab('manage')">Manage Paintings</button>
+        <button class="admin-tab" onclick="switchAdminTab('settings')">Site Settings</button>
+      </div>
+      <button class="admin-tab" onclick="logoutAdmin()" style="margin-left: auto;">Logout</button>
+    </div>
+
+    <!-- ADD PAINTING -->
+    <div class="admin-section active" id="admin-add">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Painting Name</label>
+          <input type="text" id="a-name" placeholder="e.g. Monsoon Reverie">
+        </div>
+        <div class="form-group">
+          <label>Price (₹)</label>
+          <input type="number" id="a-price" placeholder="e.g. 8500">
+        </div>
+        <div class="form-group">
+          <label>Style</label>
+          <select id="a-style">
+            <option value="abstract">Abstract</option>
+            <option value="portrait">Portrait</option>
+            <option value="landscape">Landscape</option>
+            <option value="floral">Floral</option>
+            <option value="geometric">Geometric</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Mood</label>
+          <select id="a-mood">
+            <option value="calm">Calm</option>
+            <option value="vibrant">Vibrant</option>
+            <option value="dark">Dark</option>
+            <option value="romantic">Romantic</option>
+            <option value="bold">Bold</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Size</label>
+          <select id="a-size">
+            <option value="small">Small (up to 12")</option>
+            <option value="medium">Medium (12–24")</option>
+            <option value="large">Large (24"+)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Color Palette</label>
+          <select id="a-color">
+            <option value="warm">Warm / Red / Pink</option>
+            <option value="cool">Cool / Blue</option>
+            <option value="green">Green</option>
+            <option value="golden">Golden / Amber</option>
+            <option value="mono">Dark / Monochrome</option>
+            <option value="light">Light / White</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Dimensions</label>
+          <input type="text" id="a-dims" placeholder='e.g. 18" × 24"'>
+        </div>
+        <div class="form-group">
+          <label>Image URL</label>
+          <input type="text" id="a-img" placeholder="https://..." oninput="previewImg(this.value)">
+        </div>
+        <div class="form-group">
+          <label>Or Upload Image File</label>
+          <input type="file" id="a-file" accept="image/*" onchange="handleFileUpload(this)">
+          <span id="upload-status" style="font-size: 11px; color: var(--gray); margin-top: 4px;"></span>
+        </div>
+        <div class="form-group full">
+          <img id="img-preview" class="img-url-preview" alt="preview">
+        </div>
+        <div class="form-group full">
+          <label>Description</label>
+          <textarea id="a-desc" rows="3" placeholder="Short description of the piece..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Featured on Homepage?</label>
+          <select id="a-featured">
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>New Arrival?</label>
+          <select id="a-new">
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+      </div>
+      <button class="add-btn" onclick="addPainting()">Add to Collection</button>
+    </div>
+
+    <!-- MANAGE PAINTINGS -->
+    <div class="admin-section" id="admin-manage">
+      <div class="paintings-admin-list" id="admin-painting-list"></div>
+    </div>
+
+    <!-- SITE SETTINGS -->
+    <div class="admin-section" id="admin-settings">
+      <div class="site-settings-grid">
+        <div class="settings-card">
+          <h3>Contact Details</h3>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>WhatsApp Number</label>
+              <input type="text" id="s-wa" placeholder="+91 98765 43210">
+            </div>
+            <div class="form-group">
+              <label>Email Address</label>
+              <input type="text" id="s-email" placeholder="hello@byflaminggo.com">
+            </div>
+            <div class="form-group full">
+              <label>Instagram Handle</label>
+              <input type="text" id="s-insta" placeholder="@byflaminggo">
+            </div>
+          </div>
+        </div>
+        <div class="settings-card">
+          <h3>Hero Section</h3>
+          <div class="form-grid">
+            <div class="form-group full">
+              <label>Hero Headline</label>
+              <input type="text" id="s-hero-title" placeholder="Art that speaks to your walls">
+            </div>
+            <div class="form-group full">
+              <label>Hero Subtext</label>
+              <textarea id="s-hero-sub" rows="2"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="settings-card">
+          <h3>FAQ</h3>
+          <div id="faq-admin"></div>
+          <button class="add-btn" onclick="addFAQ()" style="margin-top:12px;font-size:11px;padding:10px 20px">+ Add FAQ</button>
+        </div>
+        <button class="add-btn" onclick="saveSettings()">Save All Settings</button>
+      </div>
+    </div>
+  </div> <!-- closing #admin-dashboard-box -->
+</div> <!-- closing #page-admin -->
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">×</button>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<!-- WhatsApp Float -->
+<a class="wa-float" id="wa-float-btn" href="#" onclick="openWA('Hi! I\'d like to enquire about a painting from Byflaminggo.')">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.098.546 4.07 1.5 5.793L0 24l6.418-1.452A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.817 9.817 0 01-5.003-1.371l-.36-.213-3.807.862.918-3.692-.233-.38A9.818 9.818 0 012.182 12c0-5.42 4.398-9.818 9.818-9.818 5.42 0 9.818 4.398 9.818 9.818 0 5.42-4.398 9.818-9.818 9.818z"/></svg>
+</a>
+
+<!-- Footer -->
+<footer>
+  <div>
+    <div class="footer-logo">
+      <img src="byflaminggo.jpg" alt="Byflaminggo Logo" class="logo-img-footer">
+      by<span>flaminggo</span>
+    </div>
+    <div class="footer-tagline">Elegance in Every Step</div>
+  </div>
+  <div class="footer-links">
+    <a onclick="showPage('home')">Home</a>
+    <a onclick="showPage('catalogue')">Collection</a>
+    <a onclick="showPage('contact')">Contact</a>
+  </div>
+  <div style="text-align:right">
+    <div class="footer-copy" id="footer-copy">© 2025 Byflaminggo. All rights reserved.</div>
+    <div class="footer-copy" style="margin-top:4px;color:var(--rose)">Elegance in every piece.</div>
+  </div>
+</footer>
+
+<script>
+// ── DATA STORE ──
+let store = {
+  paintings: [],
+  settings: {
+    wa: "",
+    email: "",
+    insta: "",
+    heroTitle: "",
+    heroSub: "",
+    faqs: []
+  }
+};
+
+let selectedColors = [];
+let currentMoodFilter = null;
+
+// Helper to get Auth Headers
+function getAuthHeaders() {
+  const token = sessionStorage.getItem('byflaminggo_admin_token') || '';
+  return {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`
+  };
+}
+
+// ── API DATA INITIALIZATION ──
+async function initStore() {
+  try {
+    const [paintingsRes, settingsRes] = await Promise.all([
+      fetch('/api/paintings'),
+      fetch('/api/settings')
+    ]);
+
+    if (!paintingsRes.ok || !settingsRes.ok) {
+      throw new Error('Failed to fetch data from API');
+    }
+
+    store.paintings = await paintingsRes.json();
+    store.settings = await settingsRes.json();
+
+    // Initialize UI views with live settings
+    const s = store.settings;
+    const heroTitleEl = document.querySelector('.hero-title');
+    if (heroTitleEl) {
+      heroTitleEl.innerHTML = (s.heroTitle || "Art that speaks\nto your walls").replace(/\n/g, '<br>');
+    }
+    const heroSubEl = document.querySelector('.hero-sub');
+    if (heroSubEl) {
+      heroSubEl.textContent = s.heroSub || '';
+    }
+
+    // Once loaded, initialize current page
+    checkRoute();
+  } catch (error) {
+    console.error("Store Initialization Failed:", error);
+    // Fallback: render basic UI
+    checkRoute();
+  }
+}
+
+// ── NAVIGATION ──
+function showPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  const navEl = document.getElementById('nav-' + page);
+  if (navEl) navEl.classList.add('active');
+  window.scrollTo(0, 0);
+  if (page === 'catalogue') renderCatalogue();
+  if (page === 'home') renderHome();
+  if (page === 'contact') renderContact();
+  if (page === 'admin') renderAdmin();
+}
+
+function toggleMobile() {
+  document.getElementById('mobile-menu').classList.toggle('open');
+}
+
+// ── ROUTING (hidden admin) ──
+function checkRoute() {
+  const h = window.location.hash;
+  if (h === '#/admin' || h === '#admin') { showPage('admin'); return; }
+  showPage('home');
+}
+window.addEventListener('hashchange', checkRoute);
+window.addEventListener('load', checkRoute);
+
+// ── HOME ──
+function renderHome() {
+  const featured = store.paintings.filter(p => p.featured).slice(0, 4);
+  document.getElementById('home-featured').innerHTML = featured.map(p => paintingCard(p)).join('');
+  const moods = ['calm','vibrant','dark','romantic','bold'];
+  const moodImgs = {
+    calm: store.paintings.find(p => p.mood === 'calm')?.img || '',
+    vibrant: store.paintings.find(p => p.mood === 'vibrant')?.img || '',
+    dark: store.paintings.find(p => p.mood === 'dark')?.img || '',
+    romantic: store.paintings.find(p => p.mood === 'romantic')?.img || '',
+    bold: store.paintings.find(p => p.mood === 'bold')?.img || '',
+  };
+  document.getElementById('mood-grid').innerHTML = moods.map(m => `
+    <div class="mood-tile" onclick="filterByMood('${m}')">
+      ${moodImgs[m] ? `<img src="${moodImgs[m]}" alt="${m}" loading="lazy">` : ''}
+      <div class="mood-tile-label">${m.charAt(0).toUpperCase()+m.slice(1)}</div>
+    </div>
+  `).join('');
+}
+
+function filterByMood(mood) {
+  currentMoodFilter = mood;
+  showPage('catalogue');
+  document.querySelectorAll('#page-catalogue input[type=checkbox]').forEach(cb => { cb.checked = false; });
+  const moodCbs = document.querySelectorAll('#page-catalogue input[value="' + mood + '"]');
+  moodCbs.forEach(cb => { cb.checked = true; });
+  applyFilters();
+}
+
+// ── PAINTING CARD ──
+function paintingCard(p) {
+  return `
+    <div class="painting-card" onclick="showDetail(${p.id})">
+      <div class="painting-card-img">
+        <img src="${p.img}" alt="${p.name}" loading="lazy">
+      </div>
+      <div class="painting-card-name" style="font-weight: 500;">${p.name}</div>
+      <div class="painting-card-meta">${p.style} · ${p.dims || ''}</div>
+      <div class="painting-card-price" style="font-weight: 600;">₹${Number(p.price).toLocaleString('en-IN')}</div>
+    </div>
+  `;
+}
+
+// ── CATALOGUE ──
+function renderCatalogue() {
+  applyFilters();
+}
+
+function applyFilters() {
+  const styles = [...document.querySelectorAll('#page-catalogue input[value]')].filter(cb => cb.checked && ['abstract','portrait','landscape','floral','geometric'].includes(cb.value)).map(cb => cb.value);
+  const moods = [...document.querySelectorAll('#page-catalogue input[value]')].filter(cb => cb.checked && ['calm','vibrant','dark','romantic','bold'].includes(cb.value)).map(cb => cb.value);
+  const sizes = [...document.querySelectorAll('#page-catalogue input[value]')].filter(cb => cb.checked && ['small','medium','large'].includes(cb.value)).map(cb => cb.value);
+  const maxPrice = parseInt(document.getElementById('price-filter').value);
+  const sort = document.getElementById('sort-select').value;
+
+  let results = store.paintings.filter(p => {
+    if (styles.length && !styles.includes(p.style)) return false;
+    if (moods.length && !moods.includes(p.mood)) return false;
+    if (sizes.length && !sizes.includes(p.size)) return false;
+    if (p.price > maxPrice) return false;
+    if (selectedColors.length && !selectedColors.includes(p.color)) return false;
+    return true;
+  });
+
+  if (sort === 'price-asc') results.sort((a,b) => a.price - b.price);
+  else if (sort === 'price-desc') results.sort((a,b) => b.price - a.price);
+  else if (sort === 'name') results.sort((a,b) => a.name.localeCompare(b.name));
+  else results.sort((a,b) => b.id - a.id);
+
+  document.getElementById('sort-count').textContent = `Showing ${results.length} painting${results.length !== 1 ? 's' : ''}`;
+  document.getElementById('catalogue-grid').innerHTML = results.length
+    ? results.map(p => paintingCard(p)).join('')
+    : '<p style="color:var(--gray);font-size:14px;padding:40px 0">No paintings match your filters. Try adjusting.</p>';
+}
+
+function updatePriceLabel(v) {
+  document.getElementById('price-max-label').textContent = '₹' + Number(v).toLocaleString('en-IN');
+}
+
+function toggleColor(color) {
+  const idx = selectedColors.indexOf(color);
+  if (idx > -1) selectedColors.splice(idx, 1);
+  else selectedColors.push(color);
+  document.querySelectorAll('.color-dot').forEach((d, i) => {
+    const colors = ['warm','cool','green','golden','mono','light'];
+    d.classList.toggle('active', selectedColors.includes(colors[i]));
+  });
+  applyFilters();
+}
+
+function clearFilters() {
+  document.querySelectorAll('#page-catalogue input[type=checkbox]').forEach(cb => cb.checked = false);
+  document.getElementById('price-filter').value = 50000;
+  updatePriceLabel(50000);
+  selectedColors = [];
+  document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
+  currentMoodFilter = null;
+  applyFilters();
+}
+
+// ── DETAIL ──
+function showDetail(id) {
+  const p = store.paintings.find(x => x.id === id);
+  if (!p) return;
+  const wa = (store.settings.wa || "").replace(/\D/g, '');
+  const msg = encodeURIComponent(`Hi! I'm interested in "${p.name}" from Byflaminggo. Could you share more details?`);
+  document.getElementById('detail-content').innerHTML = `
+    <div>
+      <div class="detail-img-main" onclick="openLightbox('${p.img}')">
+        <img src="${p.img}" alt="${p.name}">
+      </div>
+    </div>
+    <div class="detail-info">
+      <div class="detail-tags">
+        <span class="tag">${p.style}</span>
+        <span class="tag">${p.mood}</span>
+        <span class="tag">${p.size}</span>
+        ${p.isNew ? '<span class="tag" style="color:var(--rose);border-color:var(--rose-light)">New</span>' : ''}
+      </div>
+      <h1 class="detail-title">${p.name}</h1>
+      <div class="detail-price" style="font-weight: 600;">₹${Number(p.price).toLocaleString('en-IN')}</div>
+      <div class="detail-meta">
+        ${p.dims ? `<div class="detail-meta-row"><span>Dimensions</span><span>${p.dims}</span></div>` : ''}
+        <div class="detail-meta-row"><span>Style</span><span>${p.style.charAt(0).toUpperCase()+p.style.slice(1)}</span></div>
+        <div class="detail-meta-row"><span>Mood</span><span>${p.mood.charAt(0).toUpperCase()+p.mood.slice(1)}</span></div>
+        <div class="detail-meta-row"><span>Size</span><span>${p.size.charAt(0).toUpperCase()+p.size.slice(1)}</span></div>
+      </div>
+      ${p.desc ? `<p class="detail-desc">${p.desc}</p>` : ''}
+      <a class="wa-btn" href="https://wa.me/${wa}?text=${msg}" target="_blank">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.098.546 4.07 1.5 5.793L0 24l6.418-1.452A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.817 9.817 0 01-5.003-1.371l-.36-.213-3.807.862.918-3.692-.233-.38A9.818 9.818 0 012.182 12c0-5.42 4.398-9.818 9.818-9.818 5.42 0 9.818 4.398 9.818 9.818 0 5.42-4.398 9.818-9.818 9.818z"/></svg>
+        Enquire about this piece
+      </a>
+      <div class="share-row">
+        <a class="share-btn" href="https://www.instagram.com/${(store.settings.insta || "").replace('@','')}" target="_blank">Instagram</a>
+        <a class="share-btn" href="https://wa.me/${wa}?text=${msg}" target="_blank">Share on WhatsApp</a>
+      </div>
+    </div>
+  `;
+  const related = store.paintings.filter(x => x.id !== id && (x.style === p.style || x.mood === p.mood)).slice(0, 4);
+  document.getElementById('related-grid').innerHTML = related.map(r => paintingCard(r)).join('');
+  showPage('detail');
+}
+
+// ── CONTACT ──
+function renderContact() {
+  const s = store.settings;
+  const wa = (s.wa || "").replace(/\D/g, '');
+  document.getElementById('contact-wa-btn').href = `https://wa.me/${wa}?text=${encodeURIComponent("Hi! I'd like to enquire about a painting from Byflaminggo.")}`;
+  document.getElementById('contact-insta-link').href = `https://instagram.com/${s.insta.replace('@','')}`;
+  document.getElementById('contact-email-link').href = `mailto:${s.email}`;
+  document.getElementById('contact-email-link').textContent = s.email;
+  document.getElementById('faq-list').innerHTML = (s.faqs || []).map(f => `
+    <div class="faq-item">
+      <div class="faq-q">${f.q}</div>
+      <div class="faq-a">${f.a}</div>
+    </div>
+  `).join('');
+}
+
+// ── LIGHTBOX ──
+function openLightbox(src) {
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+}
+
+// ── WHATSAPP ──
+function openWA(msg) {
+  const wa = (store.settings.wa || "").replace(/\D/g, '');
+  window.open(`https://wa.me/${wa}?text=${encodeURIComponent(msg)}`, '_blank');
+}
+document.getElementById('wa-float-btn').addEventListener('click', function(e) {
+  e.preventDefault();
+  openWA("Hi! I'd like to enquire about a painting from Byflaminggo.");
+});
+
+// ── ADMIN ──
+function checkAdminAuth() {
+  return sessionStorage.getItem('byflaminggo_admin_token') !== null;
+}
+
+function renderAdmin() {
+  const loginBox = document.getElementById('admin-login-box');
+  const dashboardBox = document.getElementById('admin-dashboard-box');
+
+  if (!checkAdminAuth()) {
+    loginBox.style.display = 'block';
+    dashboardBox.style.display = 'none';
+    return;
+  }
+
+  loginBox.style.display = 'none';
+  dashboardBox.style.display = 'block';
+
+  renderAdminList();
+  renderFAQAdmin();
+  const s = store.settings;
+  document.getElementById('s-wa').value = s.wa;
+  document.getElementById('s-email').value = s.email;
+  document.getElementById('s-insta').value = s.insta;
+  document.getElementById('s-hero-title').value = s.heroTitle || '';
+  document.getElementById('s-hero-sub').value = s.heroSub || '';
+}
+
+async function submitAdminLogin() {
+  const password = document.getElementById('admin-pass').value;
+  const errorEl = document.getElementById('login-error');
+  errorEl.style.display = 'none';
+
+  try {
+    const res = await fetch('/api/settings', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${password}`
+      },
+      body: JSON.stringify({ checkAuthOnly: true })
+    });
+
+    if (res.status === 200) {
+      sessionStorage.setItem('byflaminggo_admin_token', password);
+      renderAdmin();
+    } else {
+      errorEl.style.display = 'block';
+    }
+  } catch (error) {
+    console.error("Login verification failed:", error);
+    errorEl.textContent = "Server communication error.";
+    errorEl.style.display = 'block';
+  }
+}
+
+function logoutAdmin() {
+  sessionStorage.removeItem('byflaminggo_admin_token');
+  const passwordInput = document.getElementById('admin-pass');
+  if (passwordInput) passwordInput.value = '';
+  renderAdmin();
+}
+
+async function handleFileUpload(input) {
+  const file = input.files[0];
+  if (!file) return;
+
+  const statusEl = document.getElementById('upload-status');
+  statusEl.textContent = "Uploading image...";
+  statusEl.style.color = "var(--rose)";
+
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+  reader.onload = async function () {
+    try {
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify({
+          fileName: file.name,
+          fileType: file.type,
+          fileData: reader.result
+        })
+      });
+
+      if (!res.ok) throw new Error("Upload failed");
+      const data = await res.json();
+
+      document.getElementById('a-img').value = data.publicUrl;
+      previewImg(data.publicUrl);
+      statusEl.textContent = "Upload successful!";
+      statusEl.style.color = "#25D366";
+    } catch (err) {
+      console.error(err);
+      statusEl.textContent = "Upload failed. Try again.";
+      statusEl.style.color = "var(--rose)";
+    }
+  };
+}
+
+function switchAdminTab(tab) {
+  document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('admin-' + tab).classList.add('active');
+  if (tab === 'manage') renderAdminList();
+  if (tab === 'settings') renderFAQAdmin();
+}
+
+function renderAdminList() {
+  document.getElementById('admin-painting-list').innerHTML = store.paintings.map(p => `
+    <div class="admin-painting-row">
+      <img src="${p.img}" alt="${p.name}" onerror="this.style.background='var(--rose-pale)'">
+      <div class="admin-row-info">
+        <div class="admin-row-name">${p.name}</div>
+        <div class="admin-row-meta">₹${Number(p.price).toLocaleString('en-IN')} · ${p.style} · ${p.mood} · ${p.size}${p.featured ? ' · ⭐ Featured' : ''}</div>
+      </div>
+      <div class="admin-row-actions">
+        <button class="admin-edit-btn" onclick="editPainting(${p.id})">Edit</button>
+        <button class="admin-del-btn" onclick="deletePainting(${p.id})">Remove</button>
+      </div>
+    </div>
+  `).join('') || '<p style="color:var(--gray);font-size:14px">No paintings yet. Add some from the Add Painting tab.</p>';
+}
+
+async function addPainting() {
+  const name = document.getElementById('a-name').value.trim();
+  const price = parseInt(document.getElementById('a-price').value);
+  if (!name || !price) { alert('Please enter at least a name and price.'); return; }
+  
+  const newP = {
+    name,
+    price,
+    style: document.getElementById('a-style').value,
+    mood: document.getElementById('a-mood').value,
+    size: document.getElementById('a-size').value,
+    color: document.getElementById('a-color').value,
+    dims: document.getElementById('a-dims').value,
+    img: document.getElementById('a-img').value || 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=600&q=80',
+    desc: document.getElementById('a-desc').value,
+    featured: document.getElementById('a-featured').value === 'yes',
+    isNew: document.getElementById('a-new').value === 'yes',
+  };
+
+  try {
+    const res = await fetch('/api/paintings', {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(newP)
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error || 'Failed to add painting');
+    }
+
+    const savedP = await res.json();
+    store.paintings.push(savedP);
+    
+    ['a-name','a-price','a-dims','a-img','a-desc'].forEach(id => document.getElementById(id).value = '');
+    const fileInput = document.getElementById('a-file');
+    if (fileInput) fileInput.value = '';
+    const statusEl = document.getElementById('upload-status');
+    if (statusEl) statusEl.textContent = '';
+    
+    document.getElementById('img-preview').style.display = 'none';
+    alert(`"${savedP.name}" added to the collection!`);
+  } catch (error) {
+    console.error(error);
+    alert(`Error: ${error.message}`);
+  }
+}
+
+async function editPainting(id) {
+  const p = store.paintings.find(x => x.id === id);
+  if (!p) return;
+  const newName = prompt('Painting name:', p.name);
+  if (newName === null) return;
+  const newPrice = prompt('Price (₹):', p.price);
+  if (newPrice === null) return;
+  const newImg = prompt('Image URL:', p.img);
+  if (newImg === null) return;
+  const newFeatured = confirm('Show on homepage as featured?');
+
+  const updatedData = {
+    ...p,
+    name: newName || p.name,
+    price: parseInt(newPrice) || p.price,
+    img: newImg || p.img,
+    featured: newFeatured
+  };
+
+  try {
+    const res = await fetch(`/api/paintings/${id}`, {
+      method: 'PUT',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(updatedData)
+    });
+
+    if (!res.ok) throw new Error('Failed to update painting');
+    const savedP = await res.json();
+    
+    const idx = store.paintings.findIndex(x => x.id === id);
+    store.paintings[idx] = savedP;
+
+    renderAdminList();
+    alert('Painting updated!');
+  } catch (error) {
+    console.error(error);
+    alert(`Error: ${error.message}`);
+  }
+}
+
+async function deletePainting(id) {
+  const p = store.paintings.find(x => x.id === id);
+  if (!p) return;
+  if (!confirm(`Remove "${p.name}" from the collection? This cannot be undone.`)) return;
+
+  try {
+    const res = await fetch(`/api/paintings/${id}`, {
+      method: 'DELETE',
+      headers: getAuthHeaders()
+    });
+
+    if (!res.ok) throw new Error('Failed to delete painting');
+
+    store.paintings = store.paintings.filter(x => x.id !== id);
+    renderAdminList();
+    alert('Painting removed!');
+  } catch (error) {
+    console.error(error);
+    alert(`Error: ${error.message}`);
+  }
+}
+
+function previewImg(url) {
+  const el = document.getElementById('img-preview');
+  if (url) { el.src = url; el.style.display = 'block'; }
+  else { el.style.display = 'none'; }
+}
+
+function renderFAQAdmin() {
+  document.getElementById('faq-admin').innerHTML = store.settings.faqs.map((f, i) => `
+    <div style="border:0.5px solid var(--border);padding:12px;margin-bottom:12px">
+      <div class="form-group" style="margin-bottom:8px">
+        <label>Question</label>
+        <input type="text" value="${f.q}" onchange="store.settings.faqs[${i}].q=this.value">
+      </div>
+      <div class="form-group">
+        <label>Answer</label>
+        <textarea rows="2" onchange="store.settings.faqs[${i}].a=this.value">${f.a}</textarea>
+      </div>
+      <button onclick="store.settings.faqs.splice(${i},1);renderFAQAdmin()" style="background:none;border:none;color:#c0392b;font-size:12px;cursor:pointer;margin-top:6px;padding:0">Remove</button>
+    </div>
+  `).join('');
+}
+
+function addFAQ() {
+  store.settings.faqs.push({ q: 'New question?', a: 'Answer here.' });
+  renderFAQAdmin();
+}
+
+async function saveSettings() {
+  const updatedSettings = {
+    wa: document.getElementById('s-wa').value,
+    email: document.getElementById('s-email').value,
+    insta: document.getElementById('s-insta').value,
+    heroTitle: document.getElementById('s-hero-title').value,
+    heroSub: document.getElementById('s-hero-sub').value,
+    faqs: store.settings.faqs
+  };
+
+  try {
+    const res = await fetch('/api/settings', {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(updatedSettings)
+    });
+
+    if (!res.ok) throw new Error('Failed to save settings');
+    store.settings = await res.json();
+
+    alert('Settings saved! Changes are live on the site.');
+  } catch (error) {
+    console.error(error);
+    alert(`Error: ${error.message}`);
+  }
+}
+
+// ── INIT ──
+initStore();
+</script>
+</body>
+</html>
