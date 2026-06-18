@@ -1513,9 +1513,11 @@ function formatStyleLabel(style) {
 
 function getUniqueStyles() {
   const defaults = ['abstract','portrait','landscape','floral','geometric','nature','animals','gods','devotional','yoga','modern','wildlife','mural'];
-  const dbStyles = store.paintings.map(p => (p.style || '').toLowerCase().trim()).filter(Boolean);
-  const combined = [...new Set([...defaults, ...dbStyles])];
-  return combined.sort();
+  const allTags = new Set(defaults);
+  store.paintings.forEach(p => {
+    getPaintingTags(p).forEach(t => allTags.add(t));
+  });
+  return [...allTags].sort();
 }
 
 function renderStyleFilters() {
@@ -1547,7 +1549,8 @@ function applyFilters() {
   const sort = document.getElementById('sort-select').value;
 
   let results = store.paintings.filter(p => {
-    if (styles.length && !styles.includes((p.style || '').toLowerCase().trim())) return false;
+    const pTags = getPaintingTags(p);
+    if (styles.length && !styles.every(t => pTags.includes(t))) return false;
     if (moods.length && !moods.includes(p.mood)) return false;
     if (sizes.length && !sizes.includes(p.size)) return false;
     if (selectedColors.length && !selectedColors.includes(p.color)) return false;
