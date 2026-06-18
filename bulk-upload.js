@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const XLSX = require('xlsx');
 const { createClient } = require('@supabase/supabase-js');
 
 // 1. Load Environment Variables from .env file
@@ -8,14 +9,13 @@ function loadEnv() {
   if (fs.existsSync(envPath)) {
     const envContent = fs.readFileSync(envPath, 'utf8');
     envContent.split('\n').forEach(line => {
-      // Remove comments and whitespace
       const cleanLine = line.trim();
       if (!cleanLine || cleanLine.startsWith('#')) return;
 
       const idx = cleanLine.indexOf('=');
       if (idx > -1) {
         const key = cleanLine.substring(0, idx).trim();
-        const val = cleanLine.substring(idx + 1).trim().replace(/^['"]|['"]$/g, ''); // strip optional quotes
+        const val = cleanLine.substring(idx + 1).trim().replace(/^['"]|['"]$/g, ''); // strip quotes
         process.env[key] = val;
       }
     });
@@ -40,52 +40,63 @@ if (!supabaseUrl || !supabaseServiceKey) {
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 // 3. Define directories
-const imagesDir = path.join(__dirname, 'bulk-images');
-const metadataFile = path.join(imagesDir, 'metadata.json');
+const excelFile = path.join(__dirname, 'byflaminggo_painting_catalog.xlsx');
+const imagesDir = path.join(__dirname, 'byflaminggo_renamed_paintings');
 
-// Helper to convert filename to readable name: e.g. "monsoon-reverie.jpg" -> "Monsoon Reverie"
-function cleanName(filename) {
-  const nameWithoutExt = path.parse(filename).name;
-  return nameWithoutExt
-    .replace(/[-_]/g, ' ')
-    .replace(/\b\w/g, c => c.toUpperCase());
+// Mappers for columns
+function mapSize(sizeStr) {
+  const s = (sizeStr || '').toLowerCase();
+  if (s.includes('large') || s.includes('24') || s.includes('36') || s.includes('48')) return 'large';
+  if (s.includes('small') || s.includes('12')) return 'small';
+  return 'medium'; // default fallback
+}
+
+function mapColor(colorStr) {
+  const c = (colorStr || '').toLowerCase();
+  if (c.includes('gold') || c.includes('amber') || c.includes('yellow') || c.includes('orange')) return 'golden';
+  if (c.includes('green') || c.includes('emerald') || c.includes('olive')) return 'green';
+  if (c.includes('blue') || c.includes('teal') || c.includes('azure') || c.includes('indigo') || c.includes('cyan')) return 'cool';
+  if (c.includes('red') || c.includes('crimson') || c.includes('pink') || c.includes('rose') || c.includes('sienna') || c.includes('burnt')) return 'warm';
+  if (c.includes('black') || c.includes('ebony') || c.includes('dark') || c.includes('grey') || c.includes('gray') || c.includes('charcoal')) return 'mono';
+  if (c.includes('white') || c.includes('ivory') || c.includes('cream') || c.includes('light')) return 'light';
+  return 'light'; // default fallback
+}
+
+function mapMood(moodStr) {
+  const m = (moodStr || '').toLowerCase();
+  if (m.includes('vibrant') || m.includes('energetic') || m.includes('vivid') || m.includes('bright') || m.includes('intense')) return 'vibrant';
+  if (m.includes('bold') || m.includes('dramatic') || m.includes('powerful')) return 'bold';
+  if (m.includes('dark') || m.includes('midnight') || m.includes('somber') || m.includes('shadow')) return 'dark';
+  if (m.includes('romantic') || m.includes('peaceful') || m.includes('serene') || m.includes('soft') || m.includes('gentle')) return 'romantic';
+  return 'calm'; // default fallback (covers devotional, calm, spiritual, etc.)
 }
 
 async function startBulkUpload() {
-  // Check if bulk-images directory exists
+  // Check if Excel catalog file exists
+  if (!fs.existsSync(excelFile)) {
+    console.error(`❌ Error: Excel catalog file not found at: ${excelFile}`);
+    process.exit(1);
+  }
+
+  // Check if paintings directory exists
   if (!fs.existsSync(imagesDir)) {
-    fs.mkdirSync(imagesDir);
-    console.log(`\n📁 Created a folder named "bulk-images" at: ${imagesDir}`);
-    console.log('👉 Please drop your 85 images in that folder and run this script again!');
-    console.log('💡 Option: You can also place a "metadata.json" inside that folder to define custom titles/descriptions.');
-    process.exit(0);
+    console.error(`❌ Error: Image folder "byflaminggo_renamed_paintings" not found at: ${imagesDir}`);
+    process.exit(1);
   }
 
-  // Read files from directory
-  const files = fs.readdirSync(imagesDir).filter(file => {
-    const ext = path.extname(file).toLowerCase();
-    return ['.jpg', '.jpeg', '.png', '.webp', '.gif'].includes(ext);
-  });
+  // Read Excel workbook
+  console.log(`\n📖 Reading Excel file: ${excelFile}...`);
+  const workbook = XLSX.readFile(excelFile);
+  const sheetName = workbook.SheetNames[0];
+  const worksheet = workbook.Sheets[sheetName];
+  const rows = XLSX.utils.sheet_to_json(worksheet);
 
-  if (files.length === 0) {
-    console.log(`\n📂 Folder "bulk-images" is empty.`);
-    console.log(`👉 Please copy your images to: ${imagesDir}`);
-    console.log('Then run: node bulk-upload.js');
-    process.exit(0);
+  if (rows.length === 0) {
+    console.error('❌ Error: The Excel file contains 0 rows of data.');
+    process.exit(1);
   }
 
-  console.log(`\n🚀 Found ${files.length} images. Starting bulk upload...`);
-
-  // Load metadata.json if it exists
-  let metadataList = [];
-  if (fs.existsSync(metadataFile)) {
-    try {
-      metadataList = JSON.parse(fs.readFileSync(metadataFile, 'utf8'));
-      console.log('✔ Loaded metadata.json configurations');
-    } catch (e) {
-      console.warn('⚠ Warning: Failed to parse metadata.json. Default values will be used. Error:', e.message);
-    }
-  }
+  console.log(`🚀 Found ${rows.length} rows in Excel. Matching with image files...`);
 
   // Ensure public Storage Bucket exists
   try {
@@ -98,26 +109,37 @@ async function startBulkUpload() {
   let successCount = 0;
   let failCount = 0;
 
-  for (let i = 0; i < files.length; i++) {
-    const filename = files[i];
-    const filePath = path.join(imagesDir, filename);
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows[i];
+    const filename = row['New Filename'] || row['New FileName'];
+    
+    if (!filename) {
+      console.warn(`\n⚠ [${i + 1}/${rows.length}] Warning: Row has no "New Filename" defined. Skipping.`);
+      failCount++;
+      continue;
+    }
 
-    console.log(`\n[${i + 1}/${files.length}] Processing "${filename}"...`);
+    const filePath = path.join(imagesDir, filename);
+    console.log(`\n[${i + 1}/${rows.length}] Processing "${filename}"...`);
+
+    if (!fs.existsSync(filePath)) {
+      console.error(`  ❌ Error: File not found in images directory: ${filePath}`);
+      failCount++;
+      continue;
+    }
 
     try {
-      // Find matching metadata from json, or fallback to defaults
-      const meta = metadataList.find(m => m.filename === filename) || {};
-
-      const paintingName = meta.name || cleanName(filename);
-      const style = (meta.style || 'nature').toLowerCase().trim();
-      const mood = (meta.mood || 'calm').toLowerCase().trim();
-      const size = (meta.size || 'medium').toLowerCase().trim();
-      const color = (meta.color || 'warm').toLowerCase().trim();
-      const dims = meta.dims || '18" × 24"';
-      const desc = meta.desc || 'Original artwork.';
-      const featured = typeof meta.featured === 'boolean' ? meta.featured : false;
-      const isNew = typeof meta.isNew === 'boolean' ? meta.isNew : true;
-      const likes = typeof meta.likes === 'number' ? meta.likes : 0;
+      const paintingName = row['Painting Name'] || filename;
+      const style = (row['Style / Category'] || 'General').trim();
+      const mood = mapMood(row['Mood']);
+      const size = mapSize(row['Size']);
+      const color = mapColor(row['Colour Palette'] || row['Color Palette']);
+      const dims = row['Dimensions'] || '18" × 24"';
+      const desc = row['Description'] || 'Original artwork.';
+      
+      // Feature the first 8 paintings for a beautiful homepage setup
+      const featured = (row['No.'] || (i + 1)) <= 8; 
+      const isNew = true; // Mark all uploaded items as new arrivals
 
       // Read file buffer
       const fileBuffer = fs.readFileSync(filePath);
@@ -126,7 +148,7 @@ async function startBulkUpload() {
       const storagePath = `uploads/${uniqueName}`;
 
       // 1. Upload to Supabase Storage
-      const mimeType = `image/${extension === 'jpg' ? 'jpeg' : extension}`;
+      const mimeType = `image/${extension === 'jpg' ? 'jpeg' : (extension === 'png' ? 'png' : 'jpeg')}`;
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from('paintings')
         .upload(storagePath, fileBuffer, {
@@ -142,14 +164,14 @@ async function startBulkUpload() {
         .getPublicUrl(storagePath);
 
       const publicUrl = urlData.publicUrl;
-      console.log(`  ✔ Uploaded to Storage: ${publicUrl}`);
+      console.log(`  ✔ Uploaded Image to Storage: ${publicUrl}`);
 
       // 2. Insert record into Supabase PostgreSQL Database
       const { data: dbData, error: dbError } = await supabase
         .from('paintings')
         .insert([{
           name: paintingName,
-          price: 0, // default price is 0
+          price: 0,
           style: style,
           mood: mood,
           size: size,
@@ -159,16 +181,16 @@ async function startBulkUpload() {
           desc: desc,
           featured: featured,
           is_new: isNew,
-          likes: likes
+          likes: 0
         }])
         .select('*');
 
       if (dbError) throw dbError;
 
-      console.log(`  ✔ Inserted into Database: "${paintingName}" under category "${style}"`);
+      console.log(`  ✔ Saved Database Entry: "${paintingName}" under style "${style}"`);
       successCount++;
     } catch (error) {
-      console.error(`  ❌ Error processing "${filename}":`, error.message);
+      console.error(`  ❌ Error:`, error.message);
       failCount++;
     }
   }
@@ -178,7 +200,7 @@ async function startBulkUpload() {
   console.log(`✔ Successful: ${successCount}`);
   console.log(`❌ Failed:     ${failCount}`);
   console.log(`=========================`);
-  console.log(`👉 Commit your project changes and push to GitHub so your website is updated!`);
+  console.log(`👉 Please deploy your updates so your website connects to the uploaded paintings!`);
 }
 
 startBulkUpload();

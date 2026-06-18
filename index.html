@@ -494,20 +494,35 @@
     max-height: 720px;
     overflow: hidden;
     background: var(--rose-pale);
+    display: flex;
+    align-items: center;
   }
   .hero-slider {
     display: flex;
     width: 100%;
     height: 100%;
     transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    align-items: center;
   }
   .hero-slide {
-    min-width: 100%;
-    height: 100%;
+    min-width: 80%;
+    width: 80%;
+    height: 85%;
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
+    opacity: 0.45;
+    transform: scale(0.94);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    margin: 0 10px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  }
+  .hero-slide.active {
+    opacity: 1;
+    transform: scale(1);
   }
   .hero-slide-img {
     position: absolute;
@@ -516,8 +531,9 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: brightness(0.75);
+    filter: brightness(0.7);
     transition: transform 6s ease;
+    border-radius: 20px;
   }
   .hero-slide.active .hero-slide-img {
     transform: scale(1.05);
@@ -1221,7 +1237,7 @@ function startSlider() {
   if (sliderInterval) clearInterval(sliderInterval);
   sliderInterval = setInterval(() => {
     nextSlide();
-  }, 3000);
+  }, 5000);
 }
 
 function nextSlide() {
@@ -1240,7 +1256,9 @@ function goToSlide(index) {
 function updateSliderPosition() {
   const slider = document.getElementById('home-slider-track');
   if (!slider) return;
-  slider.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
+  // Center slide positioning math: 10% offset (first 80% slide centered in 100% container)
+  // minus 10px margin-left, minus active slide index times (80% width + 20px margins total gap)
+  slider.style.transform = `translateX(calc(10% - 10px - ${currentSlideIndex * 80}% - ${currentSlideIndex * 20}px))`;
   
   const slides = document.querySelectorAll('.hero-slide');
   slides.forEach((slide, idx) => {
@@ -1323,7 +1341,7 @@ function renderHome() {
   const tabsContainer = document.getElementById('style-tabs');
   if (tabsContainer) {
     tabsContainer.innerHTML = styles.map(s => `
-      <button class="style-tab" onclick="filterByStyle('${s}')">${s.charAt(0).toUpperCase() + s.slice(1)}</button>
+      <button class="style-tab" onclick="filterByStyle('${s}')">${formatStyleLabel(s)}</button>
     `).join('');
   }
 
@@ -1370,6 +1388,17 @@ function renderCatalogue() {
   applyFilters();
 }
 
+function formatStyleLabel(style) {
+  if (!style) return '';
+  return style
+    .split(' ')
+    .map(word => {
+      if (word === '/') return '/';
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    })
+    .join(' ');
+}
+
 function getUniqueStyles() {
   const defaults = ['abstract','portrait','landscape','floral','geometric','nature','animals','gods','devotional','yoga','modern','wildlife','mural'];
   const dbStyles = store.paintings.map(p => (p.style || '').toLowerCase().trim()).filter(Boolean);
@@ -1385,7 +1414,7 @@ function renderStyleFilters() {
   container.innerHTML = styles.map(s => `
     <label class="filter-option">
       <input type="checkbox" value="${s}" onchange="applyFilters()"> 
-      ${s.charAt(0).toUpperCase() + s.slice(1)}
+      ${formatStyleLabel(s)}
     </label>
   `).join('');
 }
@@ -1455,7 +1484,7 @@ function showDetail(id) {
     </div>
     <div class="detail-info">
       <div class="detail-tags">
-        <span class="tag">${p.style}</span>
+        <span class="tag">${formatStyleLabel(p.style)}</span>
         <span class="tag">${p.mood}</span>
         <span class="tag">${p.size}</span>
         ${p.isNew ? '<span class="tag" style="color:var(--rose);border-color:var(--rose-light)">New</span>' : ''}
@@ -1463,7 +1492,7 @@ function showDetail(id) {
       <h1 class="detail-title">${p.name}</h1>
       <div class="detail-meta">
         ${p.dims ? `<div class="detail-meta-row"><span>Dimensions</span><span>${p.dims}</span></div>` : ''}
-        <div class="detail-meta-row"><span>Style</span><span>${p.style.charAt(0).toUpperCase()+p.style.slice(1)}</span></div>
+        <div class="detail-meta-row"><span>Style</span><span>${formatStyleLabel(p.style)}</span></div>
         <div class="detail-meta-row"><span>Mood</span><span>${p.mood.charAt(0).toUpperCase()+p.mood.slice(1)}</span></div>
         <div class="detail-meta-row"><span>Size</span><span>${p.size.charAt(0).toUpperCase()+p.size.slice(1)}</span></div>
       </div>

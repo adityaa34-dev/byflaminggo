@@ -4,7 +4,8 @@
   "description": "Byflaminggo - Elegance in Every Step",
   "main": "index.html",
   "dependencies": {
-    "@supabase/supabase-js": "^2.39.8"
+    "@supabase/supabase-js": "^2.39.8",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "netlify-cli": "^17.16.0"
