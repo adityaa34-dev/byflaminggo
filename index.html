@@ -234,7 +234,28 @@
   }
   .catalogue-header p { color: var(--gray); font-size: 14px; margin-top: 8px; }
   .catalogue-layout { display: flex; gap: 40px; padding: 40px; align-items: flex-start; }
-  .filters { width: 220px; flex-shrink: 0; position: sticky; top: 84px; }
+  .filters {
+    width: 220px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 100px;
+    max-height: calc(100vh - 140px);
+    overflow-y: auto;
+    padding-right: 12px;
+  }
+  .filters::-webkit-scrollbar {
+    width: 4px;
+  }
+  .filters::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .filters::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 2px;
+  }
+  .filters::-webkit-scrollbar-thumb:hover {
+    background: var(--gray);
+  }
   .filter-group { margin-bottom: 32px; }
   .filter-title {
     font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase;
@@ -480,7 +501,7 @@
     .section { padding: 64px 20px; }
     .hiw-steps { grid-template-columns: 1fr; }
     .catalogue-layout { flex-direction: column; padding: 20px; }
-    .filters { width: 100%; position: static; }
+    .filters { width: 100%; position: static; max-height: none; overflow-y: visible; padding-right: 0; }
     .detail-layout { grid-template-columns: 1fr; gap: 40px; padding: 30px 20px; }
     .admin-wrap { padding: 20px; }
     .form-grid { grid-template-columns: 1fr; }
