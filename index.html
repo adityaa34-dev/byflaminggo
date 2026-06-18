@@ -187,6 +187,11 @@
     color: white;
     border-color: var(--charcoal);
   }
+  .style-tab.active {
+    background: var(--rose);
+    color: white;
+    border-color: var(--rose);
+  }
   .mood-tile-label {
     position: absolute; inset: 0; background: rgba(28,28,28,0.42);
     display: flex; align-items: center; justify-content: center;
@@ -756,7 +761,9 @@
   <section class="section">
     <p class="section-label">Browse by style</p>
     <h2 class="section-title">Browse by Style</h2>
-    <div class="style-tabs" id="style-tabs"></div>
+    <p style="font-size: 13px; color: var(--gray); text-align: center; margin-top: -30px; margin-bottom: 30px;">Select multiple styles to narrow down paintings (combines selected choices)</p>
+    <div class="style-tabs" id="style-tabs" style="margin-bottom: 40px;"></div>
+    <div class="paintings-grid" id="home-style-grid"></div>
   </section>
 
   <!-- Featured -->
@@ -1279,6 +1286,77 @@ function updateSliderPosition() {
   });
 }
 
+// Tag processing helper functions
+function getPaintingTags(p) {
+  if (!p.style) return [];
+  // Split by slashes or spaces, clean, lowercase, and filter out tiny words
+  return p.style
+    .split(/[\/\s]+/)
+    .map(t => t.trim().toLowerCase())
+    .filter(t => t.length > 1 && t !== '&' && t !== 'and');
+}
+
+function getUniqueStyleTags() {
+  const allTags = new Set();
+  store.paintings.forEach(p => {
+    getPaintingTags(p).forEach(t => allTags.add(t));
+  });
+  return [...allTags].sort();
+}
+
+let selectedHomeTags = [];
+
+function toggleHomeTag(tag) {
+  const idx = selectedHomeTags.indexOf(tag);
+  if (idx > -1) {
+    selectedHomeTags.splice(idx, 1);
+  } else {
+    // limit to 3 tags max to keep search results relevant
+    if (selectedHomeTags.length >= 3) {
+      alert("You can select up to 3 tags to filter.");
+      return;
+    }
+    selectedHomeTags.push(tag);
+  }
+  renderHomeTabs();
+  renderHomeGrid();
+}
+
+function renderHomeTabs() {
+  const tabsContainer = document.getElementById('style-tabs');
+  if (!tabsContainer) return;
+  
+  const tags = getUniqueStyleTags();
+  tabsContainer.innerHTML = tags.map(t => {
+    const isActive = selectedHomeTags.includes(t) ? 'active' : '';
+    return `
+      <button class="style-tab ${isActive}" onclick="toggleHomeTag('${t}')">
+        ${formatStyleLabel(t)}
+      </button>
+    `;
+  }).join('');
+}
+
+function renderHomeGrid() {
+  const grid = document.getElementById('home-style-grid');
+  if (!grid) return;
+  
+  let results = store.paintings;
+  if (selectedHomeTags.length > 0) {
+    results = store.paintings.filter(p => {
+      const pTags = getPaintingTags(p);
+      // Every selected tag must be included in the painting's tags (AND filter)
+      return selectedHomeTags.every(t => pTags.includes(t));
+    });
+  }
+  
+  if (results.length === 0) {
+    grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: var(--gray); padding: 40px 0; font-size: 14px;">No paintings match all selected styles. Try deselecting a tag.</p>`;
+  } else {
+    grid.innerHTML = results.map(p => paintingCard(p)).join('');
+  }
+}
+
 // ── HOME ──
 function renderHome() {
   // 1. Render Hero Slider (Featured, New, or Liked paintings)
@@ -1336,14 +1414,9 @@ function renderHome() {
     }
   }
 
-  // 2. Render style tabs
-  const styles = getUniqueStyles();
-  const tabsContainer = document.getElementById('style-tabs');
-  if (tabsContainer) {
-    tabsContainer.innerHTML = styles.map(s => `
-      <button class="style-tab" onclick="filterByStyle('${s}')">${formatStyleLabel(s)}</button>
-    `).join('');
-  }
+  // 2. Render style tabs & grid on homepage
+  renderHomeTabs();
+  renderHomeGrid();
 
   // 3. Render Featured Works (limit to first 4 featured works)
   const featuredGrid = document.getElementById('home-featured');
