@@ -28,7 +28,9 @@ const defaultPaintings = [
 exports.handler = async (event, context) => {
   const method = event.httpMethod;
   const pathParts = event.path.split('/');
-  const id = pathParts[pathParts.length - 1] !== 'paintings' ? parseInt(pathParts[pathParts.length - 1]) : null;
+  const lastPart = pathParts[pathParts.length - 1];
+  const isLikeRoute = lastPart === 'like';
+  const id = !isLikeRoute && lastPart !== 'paintings' ? parseInt(lastPart) : null;
 
   // Set standard response headers (CORS & Content-Type)
   const headers = {
@@ -76,8 +78,75 @@ exports.handler = async (event, context) => {
         img: p.img,
         desc: p.desc,
         featured: p.featured,
-        isNew: p.is_new
+        isNew: p.is_new,
+        likes: p.likes || 0
       }));
+
+      return { statusCode: 200, headers, body: JSON.stringify(formatted) };
+    }
+
+    // Public endpoint for liking a painting (no admin authentication needed)
+    if (method === 'POST' && isLikeRoute) {
+      const payload = JSON.parse(event.body);
+      const paintingId = parseInt(payload.id);
+      if (isNaN(paintingId)) {
+        return { statusCode: 400, headers, body: JSON.stringify({ error: "Invalid painting ID" }) };
+      }
+
+      let data;
+      // 1. Try calling increment_likes RPC
+      let { data: rpcData, error: rpcError } = await supabase.rpc('increment_likes', { row_id: paintingId });
+
+      if (rpcError) {
+        console.warn(`RPC increment_likes failed, trying fallback: ${rpcError.message}`);
+        // 2. Fallback: fetch current, increment, and update
+        const { data: p, error: fetchErr } = await supabase
+          .from('paintings')
+          .select('likes')
+          .eq('id', paintingId)
+          .single();
+
+        if (fetchErr) throw fetchErr;
+
+        const newLikes = (p.likes || 0) + 1;
+        const { data: updated, error: updateErr } = await supabase
+          .from('paintings')
+          .update({ likes: newLikes })
+          .eq('id', paintingId)
+          .select('*')
+          .single();
+
+        if (updateErr) throw updateErr;
+        data = updated;
+      } else {
+        // Fetch the updated painting to return
+        const { data: updated, error: fetchErr } = await supabase
+          .from('paintings')
+          .select('*')
+          .eq('id', paintingId)
+          .single();
+        if (!fetchErr) {
+          data = updated;
+        } else {
+          throw fetchErr;
+        }
+      }
+
+      const formatted = {
+        id: data.id,
+        name: data.name,
+        price: data.price,
+        style: data.style,
+        mood: data.mood,
+        size: data.size,
+        color: data.color,
+        dims: data.dims,
+        img: data.img,
+        desc: data.desc,
+        featured: data.featured,
+        isNew: data.is_new,
+        likes: data.likes || 0
+      };
 
       return { statusCode: 200, headers, body: JSON.stringify(formatted) };
     }
@@ -123,7 +192,8 @@ exports.handler = async (event, context) => {
         img: data.img,
         desc: data.desc,
         featured: data.featured,
-        isNew: data.is_new
+        isNew: data.is_new,
+        likes: data.likes || 0
       };
 
       return { statusCode: 201, headers, body: JSON.stringify(formatted) };
@@ -147,6 +217,9 @@ exports.handler = async (event, context) => {
         featured: payload.featured,
         is_new: payload.isNew
       };
+      if (typeof payload.likes === 'number') {
+        row.likes = payload.likes;
+      }
 
       const { data, error } = await supabase
         .from('paintings')
@@ -169,7 +242,8 @@ exports.handler = async (event, context) => {
         img: data.img,
         desc: data.desc,
         featured: data.featured,
-        isNew: data.is_new
+        isNew: data.is_new,
+        likes: data.likes || 0
       };
 
       return { statusCode: 200, headers, body: JSON.stringify(formatted) };

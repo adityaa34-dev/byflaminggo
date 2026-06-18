@@ -484,6 +484,226 @@
     .contact-wrap { padding: 64px 20px; }
     .wa-float { bottom: 20px; right: 20px; }
   }
+
+  /* ── HERO SLIDER ── */
+  .hero-slider-container {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 64px);
+    min-height: 480px;
+    max-height: 720px;
+    overflow: hidden;
+    background: var(--rose-pale);
+  }
+  .hero-slider {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .hero-slide {
+    min-width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .hero-slide-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.75);
+    transition: transform 6s ease;
+  }
+  .hero-slide.active .hero-slide-img {
+    transform: scale(1.05);
+  }
+  .hero-slide-content {
+    position: relative;
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    padding: clamp(24px, 5vw, 48px);
+    border-radius: 20px;
+    max-width: 540px;
+    width: calc(100% - 40px);
+    text-align: center;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.1);
+    transform: translateY(30px);
+    opacity: 0;
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.1s;
+  }
+  .hero-slide.active .hero-slide-content {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  .hero-slide-tag {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--rose);
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+  .hero-slide-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(28px, 5vw, 48px);
+    font-weight: 300;
+    color: var(--charcoal);
+    margin-bottom: 16px;
+    line-height: 1.15;
+  }
+  .hero-slide-desc {
+    font-size: 14px;
+    color: var(--gray);
+    margin-bottom: 24px;
+    line-height: 1.6;
+    max-width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .hero-slider-nav {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    z-index: 10;
+  }
+  .hero-slider-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .hero-slider-dot.active {
+    background: white;
+    transform: scale(1.3);
+    width: 24px;
+    border-radius: 4px;
+  }
+
+  /* ── LIKE BUTTON OVERLAY ── */
+  .painting-card-img { position: relative; }
+  .like-btn-overlay {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 10;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+  .like-btn-overlay:hover {
+    transform: scale(1.1);
+    background: white;
+  }
+  .like-btn-overlay:active {
+    transform: scale(0.9);
+  }
+  .like-btn-overlay svg {
+    width: 17px;
+    height: 17px;
+    fill: none;
+    stroke: var(--charcoal);
+    stroke-width: 2;
+    transition: all 0.25s ease;
+  }
+  .like-btn-overlay.liked svg {
+    fill: var(--rose);
+    stroke: var(--rose);
+    animation: heartBeat 0.4s ease;
+  }
+  .like-count-badge {
+    position: absolute;
+    bottom: -5px;
+    right: -5px;
+    background: var(--rose);
+    color: white;
+    font-size: 8px;
+    padding: 1px 5px;
+    border-radius: 8px;
+    font-weight: 700;
+    border: 1.5px solid white;
+    min-width: 16px;
+    text-align: center;
+  }
+
+  /* ── DETAIL LIKE BUTTON ── */
+  .detail-actions {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    margin-top: 24px;
+  }
+  .detail-like-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+    border: 1px solid var(--border);
+    background: white;
+    padding: 16px 24px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: 'DM Sans', sans-serif;
+    height: 53px;
+    flex-shrink: 0;
+  }
+  .detail-like-btn:hover {
+    background: var(--gray-light);
+    border-color: var(--gray);
+  }
+  .detail-like-btn.liked {
+    background: var(--rose-pale);
+    border-color: var(--rose-light);
+  }
+  .detail-like-btn svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: var(--charcoal);
+    stroke-width: 2;
+    transition: all 0.25s ease;
+  }
+  .detail-like-btn.liked svg {
+    fill: var(--rose);
+    stroke: var(--rose);
+    animation: heartBeat 0.4s ease;
+  }
+  .detail-like-text {
+    font-weight: 500;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--charcoal);
+  }
+
+  @keyframes heartBeat {
+    0% { transform: scale(1); }
+    30% { transform: scale(1.3); }
+    60% { transform: scale(0.9); }
+    100% { transform: scale(1); }
+  }
 </style>
 </head>
 <body>
@@ -513,30 +733,21 @@
 
 <!-- ══════════════ HOME PAGE ══════════════ -->
 <div class="page active" id="page-home">
-  <section class="hero">
-    <div class="hero-bg-text">ART</div>
-    <div class="hero-content">
-      <img src="byflaminggo.jpg" alt="Byflaminggo Logo" class="logo-img-hero" style="height: 60px; width: auto; object-fit: contain; margin-bottom: 20px; border-radius: 50%;">
-      <p class="hero-eyebrow">Byflaminggo — Elegance in Every Step</p>
-      <h1 class="hero-title">Art that <em>speaks</em><br>to your walls</h1>
-      <p class="hero-sub">Curated paintings and portraits delivered to your home. Browse, fall in love, and reach out — we'll do the rest.</p>
-      <a class="btn-primary" onclick="showPage('catalogue')">Browse Collection</a>
-      <a class="btn-outline" onclick="showPage('contact')">Get in Touch</a>
-    </div>
-  </section>
-
-  <!-- Featured -->
-  <section class="section">
-    <p class="section-label">Curated picks</p>
-    <h2 class="section-title">Featured Works</h2>
-    <div class="paintings-grid" id="home-featured"></div>
-  </section>
+  <!-- Hero Slider -->
+  <div class="hero-slider-container" id="home-slider"></div>
 
   <!-- Style Tabs -->
-  <section class="section" style="padding-top:0">
+  <section class="section">
     <p class="section-label">Browse by style</p>
     <h2 class="section-title">Browse by Style</h2>
     <div class="style-tabs" id="style-tabs"></div>
+  </section>
+
+  <!-- Featured -->
+  <section class="section" style="padding-top:0">
+    <p class="section-label">Curated picks</p>
+    <h2 class="section-title">Featured Works</h2>
+    <div class="paintings-grid" id="home-featured"></div>
   </section>
 
   <!-- How It Works -->
@@ -694,6 +905,7 @@
 
     <!-- ADD PAINTING -->
     <div class="admin-section active" id="admin-add">
+      <h2 id="admin-form-title" style="margin-bottom: 24px; font-weight: 500; font-family: 'Cormorant Garamond', serif; font-size: 26px;">Add New Painting</h2>
       <div class="form-grid">
         <div class="form-group">
           <label>Painting Name</label>
@@ -768,7 +980,10 @@
           </select>
         </div>
       </div>
-      <button class="add-btn" onclick="addPainting()">Add to Collection</button>
+      <div style="display: flex; gap: 16px; margin-top: 24px;">
+        <button class="add-btn" id="admin-submit-btn" onclick="savePaintingForm()">Add to Collection</button>
+        <button class="btn-outline" id="admin-cancel-btn" onclick="cancelEditMode()" style="display: none; height: 46px; margin-top: 0; padding: 12px 30px;">Cancel Edit</button>
+      </div>
     </div>
 
     <!-- MANAGE PAINTINGS -->
@@ -923,15 +1138,201 @@ function checkRoute() {
 window.addEventListener('hashchange', checkRoute);
 window.addEventListener('load', checkRoute);
 
+// Liking system helpers
+function getLikedPaintings() {
+  try {
+    return JSON.parse(localStorage.getItem('liked_paintings')) || [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function isLiked(id) {
+  return getLikedPaintings().includes(id);
+}
+
+async function likePainting(event, id) {
+  if (event) {
+    event.stopPropagation(); // Stop clicking card from opening detail view
+  }
+  
+  const liked = getLikedPaintings();
+  if (liked.includes(id)) {
+    alert("You've already liked this painting!");
+    return;
+  }
+  
+  liked.push(id);
+  localStorage.setItem('liked_paintings', JSON.stringify(liked));
+  
+  const p = store.paintings.find(x => x.id === id);
+  if (p) {
+    p.likes = (p.likes || 0) + 1;
+  }
+  
+  updateLikeUI(id, p ? p.likes : 1);
+  
+  try {
+    const res = await fetch('/api/paintings/like', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ id })
+    });
+    
+    if (res.ok) {
+      const updatedP = await res.json();
+      if (p) {
+        p.likes = updatedP.likes;
+      }
+      updateLikeUI(id, updatedP.likes);
+    }
+  } catch (err) {
+    console.error('Failed to save like on server:', err);
+  }
+}
+
+function updateLikeUI(id, likesCount) {
+  document.querySelectorAll(`.like-btn-overlay[data-id="${id}"]`).forEach(btn => {
+    btn.classList.add('liked');
+    const badge = btn.querySelector('.like-count-badge');
+    if (badge) badge.textContent = likesCount;
+  });
+  
+  const detailLikeBtn = document.querySelector(`.detail-like-btn[data-id="${id}"]`);
+  if (detailLikeBtn) {
+    detailLikeBtn.classList.add('liked');
+    const svg = detailLikeBtn.querySelector('svg');
+    if (svg) {
+      svg.setAttribute('fill', 'var(--rose)');
+      svg.setAttribute('stroke', 'var(--rose)');
+    }
+    const text = detailLikeBtn.querySelector('.detail-like-text');
+    if (text) text.textContent = `${likesCount} Likes`;
+  }
+}
+
+// Slider states
+let currentSlideIndex = 0;
+let sliderInterval = null;
+
+function startSlider() {
+  if (sliderInterval) clearInterval(sliderInterval);
+  sliderInterval = setInterval(() => {
+    nextSlide();
+  }, 3000);
+}
+
+function nextSlide() {
+  const slides = document.querySelectorAll('.hero-slide');
+  if (slides.length <= 1) return;
+  currentSlideIndex = (currentSlideIndex + 1) % slides.length;
+  updateSliderPosition();
+}
+
+function goToSlide(index) {
+  currentSlideIndex = index;
+  updateSliderPosition();
+  startSlider(); // reset timer on manual interaction
+}
+
+function updateSliderPosition() {
+  const slider = document.getElementById('home-slider-track');
+  if (!slider) return;
+  slider.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
+  
+  const slides = document.querySelectorAll('.hero-slide');
+  slides.forEach((slide, idx) => {
+    if (idx === currentSlideIndex) {
+      slide.classList.add('active');
+    } else {
+      slide.classList.remove('active');
+    }
+  });
+
+  const dots = document.querySelectorAll('.hero-slider-dot');
+  dots.forEach((dot, idx) => {
+    if (idx === currentSlideIndex) {
+      dot.classList.add('active');
+    } else {
+      dot.classList.remove('active');
+    }
+  });
+}
+
 // ── HOME ──
 function renderHome() {
-  const featured = store.paintings.filter(p => p.featured).slice(0, 4);
-  document.getElementById('home-featured').innerHTML = featured.map(p => paintingCard(p)).join('');
+  // 1. Render Hero Slider (Featured, New, or Liked paintings)
+  let sliderPaintings = store.paintings.filter(p => p.featured || p.isNew || (p.likes && p.likes > 0));
   
+  sliderPaintings.sort((a, b) => {
+    if (a.featured && !b.featured) return -1;
+    if (!a.featured && b.featured) return 1;
+    if (a.isNew && !b.isNew) return -1;
+    if (!a.isNew && b.isNew) return 1;
+    return (b.likes || 0) - (a.likes || 0);
+  });
+
+  if (sliderPaintings.length === 0) {
+    sliderPaintings = store.paintings.slice(0, 4);
+  }
+
+  const sliderContainer = document.getElementById('home-slider');
+  if (sliderContainer) {
+    if (sliderPaintings.length === 0) {
+      sliderContainer.innerHTML = `<div style="padding: 100px; text-align: center; color: var(--gray);">Loading paintings...</div>`;
+    } else {
+      const slidesHtml = sliderPaintings.map((p, idx) => {
+        const tag = p.featured ? 'Featured Work' : (p.isNew ? 'New Arrival' : 'Popular Choice');
+        return `
+          <div class="hero-slide ${idx === 0 ? 'active' : ''}">
+            <img class="hero-slide-img" src="${p.img}" alt="${p.name}">
+            <div class="hero-slide-content">
+              <p class="hero-slide-tag">${tag}</p>
+              <h1 class="hero-slide-title">${p.name}</h1>
+              <p class="hero-slide-desc">${p.desc ? p.desc.substring(0, 120) + (p.desc.length > 120 ? '...' : '') : 'Original artwork.'}</p>
+              <div style="display: flex; gap: 12px; justify-content: center;">
+                <button class="btn-primary" onclick="showDetail(${p.id})">View Details</button>
+                <button class="btn-outline" onclick="openWA('Hi! I want to enquire about the painting: ${p.name}')" style="margin-left: 0;">Enquire</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      const dotsHtml = sliderPaintings.map((p, idx) => `
+        <div class="hero-slider-dot ${idx === 0 ? 'active' : ''}" onclick="goToSlide(${idx})"></div>
+      `).join('');
+
+      sliderContainer.innerHTML = `
+        <div class="hero-slider" id="home-slider-track">
+          ${slidesHtml}
+        </div>
+        <div class="hero-slider-nav">
+          ${dotsHtml}
+        </div>
+      `;
+      currentSlideIndex = 0;
+      startSlider();
+    }
+  }
+
+  // 2. Render style tabs
   const styles = getUniqueStyles();
-  document.getElementById('style-tabs').innerHTML = styles.map(s => `
-    <button class="style-tab" onclick="filterByStyle('${s}')">${s.charAt(0).toUpperCase() + s.slice(1)}</button>
-  `).join('');
+  const tabsContainer = document.getElementById('style-tabs');
+  if (tabsContainer) {
+    tabsContainer.innerHTML = styles.map(s => `
+      <button class="style-tab" onclick="filterByStyle('${s}')">${s.charAt(0).toUpperCase() + s.slice(1)}</button>
+    `).join('');
+  }
+
+  // 3. Render Featured Works (limit to first 4 featured works)
+  const featuredGrid = document.getElementById('home-featured');
+  if (featuredGrid) {
+    const featured = store.paintings.filter(p => p.featured).slice(0, 4);
+    featuredGrid.innerHTML = featured.map(p => paintingCard(p)).join('');
+  }
 }
 
 function filterByStyle(style) {
@@ -946,10 +1347,16 @@ function filterByStyle(style) {
 
 // ── PAINTING CARD ──
 function paintingCard(p) {
+  const likedClass = isLiked(p.id) ? 'liked' : '';
+  const likesCount = p.likes || 0;
   return `
     <div class="painting-card" onclick="showDetail(${p.id})">
       <div class="painting-card-img">
         <img src="${p.img}" alt="${p.name}" loading="lazy">
+        <div class="like-btn-overlay ${likedClass}" data-id="${p.id}" onclick="likePainting(event, ${p.id})">
+          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <span class="like-count-badge">${likesCount}</span>
+        </div>
       </div>
       <div class="painting-card-name" style="font-weight: 500;">${p.name}</div>
       <div class="painting-card-meta">${p.style} · ${p.dims || ''}</div>
@@ -1061,10 +1468,16 @@ function showDetail(id) {
         <div class="detail-meta-row"><span>Size</span><span>${p.size.charAt(0).toUpperCase()+p.size.slice(1)}</span></div>
       </div>
       ${p.desc ? `<p class="detail-desc">${p.desc}</p>` : ''}
-      <a class="wa-btn" href="https://wa.me/${wa}?text=${msg}" target="_blank">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.098.546 4.07 1.5 5.793L0 24l6.418-1.452A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.817 9.817 0 01-5.003-1.371l-.36-.213-3.807.862.918-3.692-.233-.38A9.818 9.818 0 012.182 12c0-5.42 4.398-9.818 9.818-9.818 5.42 0 9.818 4.398 9.818 9.818 0 5.42-4.398 9.818-9.818 9.818z"/></svg>
-        Enquire about this piece
-      </a>
+      <div class="detail-actions">
+        <a class="wa-btn" href="https://wa.me/${wa}?text=${msg}" target="_blank">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.098.546 4.07 1.5 5.793L0 24l6.418-1.452A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.817 9.817 0 01-5.003-1.371l-.36-.213-3.807.862.918-3.692-.233-.38A9.818 9.818 0 012.182 12c0-5.42 4.398-9.818 9.818-9.818 5.42 0 9.818 4.398 9.818 9.818 0 5.42-4.398 9.818-9.818 9.818z"/></svg>
+          Enquire about this piece
+        </a>
+        <button class="detail-like-btn ${isLiked(p.id) ? 'liked' : ''}" data-id="${p.id}" onclick="likePainting(event, ${p.id})">
+          <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <span class="detail-like-text">${p.likes || 0} Likes</span>
+        </button>
+      </div>
     </div>
   `;
   const related = store.paintings.filter(x => x.id !== id && (x.style === p.style || x.mood === p.mood)).slice(0, 4);
@@ -1269,94 +1682,159 @@ function renderAdminList() {
   `).join('') || '<p style="color:var(--gray);font-size:14px">No paintings yet. Add some from the Add Painting tab.</p>';
 }
 
-async function addPainting() {
-  const name = document.getElementById('a-name').value.trim();
-  if (!name) { alert('Please enter at least a name.'); return; }
+let editingPaintingId = null;
+
+function cancelEditMode() {
+  editingPaintingId = null;
+  document.getElementById('admin-form-title').textContent = 'Add New Painting';
+  document.getElementById('admin-submit-btn').textContent = 'Add to Collection';
+  document.getElementById('admin-cancel-btn').style.display = 'none';
   
-  const newP = {
-    name,
-    price: 0,
-    style: document.getElementById('a-style').value.trim() || 'General',
-    mood: document.getElementById('a-mood').value,
-    size: document.getElementById('a-size').value,
-    color: document.getElementById('a-color').value,
-    dims: document.getElementById('a-dims').value,
-    img: document.getElementById('a-img').value || 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=600&q=80',
-    desc: document.getElementById('a-desc').value,
-    featured: document.getElementById('a-featured').value === 'yes',
-    isNew: document.getElementById('a-new').value === 'yes',
-  };
-
-  try {
-    const res = await fetch('/api/paintings', {
-      method: 'POST',
-      headers: getAuthHeaders(),
-      body: JSON.stringify(newP)
-    });
-
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error || 'Failed to add painting');
-    }
-
-    const savedP = await res.json();
-    store.paintings.push(savedP);
-    
-    ['a-name','a-style','a-dims','a-img','a-desc'].forEach(id => document.getElementById(id).value = '');
-    const fileInput = document.getElementById('a-file');
-    if (fileInput) fileInput.value = '';
-    const statusEl = document.getElementById('upload-status');
-    if (statusEl) statusEl.textContent = '';
-    
-    document.getElementById('img-preview').style.display = 'none';
-    
-    updateStyleSuggestions();
-    
-    alert(`"${savedP.name}" added to the collection!`);
-  } catch (error) {
-    console.error(error);
-    alert(`Error: ${error.message}`);
-  }
+  // Reset form fields
+  ['a-name','a-style','a-dims','a-img','a-desc'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  
+  const fileInput = document.getElementById('a-file');
+  if (fileInput) fileInput.value = '';
+  const statusEl = document.getElementById('upload-status');
+  if (statusEl) statusEl.textContent = '';
+  
+  document.getElementById('a-mood').value = 'calm';
+  document.getElementById('a-size').value = 'medium';
+  document.getElementById('a-color').value = 'warm';
+  document.getElementById('a-featured').value = 'no';
+  document.getElementById('a-new').value = 'yes';
+  
+  document.getElementById('img-preview').style.display = 'none';
 }
 
-async function editPainting(id) {
+function editPainting(id) {
   const p = store.paintings.find(x => x.id === id);
   if (!p) return;
-  const newName = prompt('Painting name:', p.name);
-  if (newName === null) return;
-  const newStyle = prompt('Style / Category:', p.style);
-  if (newStyle === null) return;
-  const newImg = prompt('Image URL:', p.img);
-  if (newImg === null) return;
-  const newFeatured = confirm('Show on homepage as featured?');
+  
+  editingPaintingId = id;
+  document.getElementById('admin-form-title').textContent = `Edit Painting: "${p.name}"`;
+  document.getElementById('admin-submit-btn').textContent = 'Save Changes';
+  document.getElementById('admin-cancel-btn').style.display = 'inline-block';
+  
+  // Populate fields
+  document.getElementById('a-name').value = p.name || '';
+  document.getElementById('a-style').value = p.style || '';
+  document.getElementById('a-mood').value = p.mood || 'calm';
+  document.getElementById('a-size').value = p.size || 'medium';
+  document.getElementById('a-color').value = p.color || 'warm';
+  document.getElementById('a-dims').value = p.dims || '';
+  document.getElementById('a-img').value = p.img || '';
+  document.getElementById('a-desc').value = p.desc || '';
+  document.getElementById('a-featured').value = p.featured ? 'yes' : 'no';
+  document.getElementById('a-new').value = p.isNew ? 'yes' : 'no';
+  
+  if (p.img) {
+    previewImg(p.img);
+  }
+  
+  // Switch to the form tab
+  switchAdminTab('add');
+  
+  // Smooth scroll to title
+  document.getElementById('admin-form-title').scrollIntoView({ behavior: 'smooth' });
+}
 
-  const updatedData = {
-    ...p,
-    name: newName || p.name,
-    style: newStyle || p.style,
-    img: newImg || p.img,
-    featured: newFeatured
-  };
+async function savePaintingForm() {
+  const name = document.getElementById('a-name').value.trim();
+  if (!name) { alert('Please enter at least a name.'); return; }
 
-  try {
-    const res = await fetch(`/api/paintings/${id}`, {
-      method: 'PUT',
-      headers: getAuthHeaders(),
-      body: JSON.stringify(updatedData)
-    });
+  const style = document.getElementById('a-style').value.trim() || 'General';
+  const mood = document.getElementById('a-mood').value;
+  const size = document.getElementById('a-size').value;
+  const color = document.getElementById('a-color').value;
+  const dims = document.getElementById('a-dims').value;
+  const img = document.getElementById('a-img').value || 'https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=600&q=80';
+  const desc = document.getElementById('a-desc').value;
+  const featured = document.getElementById('a-featured').value === 'yes';
+  const isNew = document.getElementById('a-new').value === 'yes';
 
-    if (!res.ok) throw new Error('Failed to update painting');
-    const savedP = await res.json();
-    
-    const idx = store.paintings.findIndex(x => x.id === id);
-    store.paintings[idx] = savedP;
+  if (editingPaintingId === null) {
+    // Add Mode
+    const newP = {
+      name,
+      price: 0,
+      style,
+      mood,
+      size,
+      color,
+      dims,
+      img,
+      desc,
+      featured,
+      isNew
+    };
 
-    updateStyleSuggestions();
-    renderAdminList();
-    alert('Painting updated!');
-  } catch (error) {
-    console.error(error);
-    alert(`Error: ${error.message}`);
+    try {
+      const res = await fetch('/api/paintings', {
+        method: 'POST',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(newP)
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || 'Failed to add painting');
+      }
+
+      const savedP = await res.json();
+      store.paintings.push(savedP);
+      
+      cancelEditMode(); // clear form
+      updateStyleSuggestions();
+      alert(`"${savedP.name}" added to the collection!`);
+    } catch (error) {
+      console.error(error);
+      alert(`Error: ${error.message}`);
+    }
+  } else {
+    // Edit Mode
+    const original = store.paintings.find(x => x.id === editingPaintingId);
+    const updatedData = {
+      ...original,
+      name,
+      price: 0,
+      style,
+      mood,
+      size,
+      color,
+      dims,
+      img,
+      desc,
+      featured,
+      isNew
+    };
+
+    try {
+      const res = await fetch(`/api/paintings/${editingPaintingId}`, {
+        method: 'PUT',
+        headers: getAuthHeaders(),
+        body: JSON.stringify(updatedData)
+      });
+
+      if (!res.ok) throw new Error('Failed to update painting');
+      const savedP = await res.json();
+      
+      const idx = store.paintings.findIndex(x => x.id === editingPaintingId);
+      if (idx > -1) {
+        store.paintings[idx] = savedP;
+      }
+
+      cancelEditMode(); // clear and reset form
+      updateStyleSuggestions();
+      renderAdminList();
+      alert('Painting updated successfully!');
+    } catch (error) {
+      console.error(error);
+      alert(`Error: ${error.message}`);
+    }
   }
 }
 
