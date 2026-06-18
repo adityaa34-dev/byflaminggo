@@ -54,6 +54,13 @@ exports.handler = async (event, context) => {
     const uniqueName = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${extension}`;
     const filePath = `uploads/${uniqueName}`;
 
+    // Ensure the bucket 'paintings' exists and is public
+    try {
+      await supabase.storage.createBucket('paintings', { public: true });
+    } catch (bucketErr) {
+      // Ignore if bucket already exists or failed
+    }
+
     // Upload to Supabase Storage bucket 'paintings'
     const { data, error } = await supabase.storage
       .from('paintings')
