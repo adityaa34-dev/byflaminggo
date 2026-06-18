@@ -1399,45 +1399,11 @@ function formatStyleLabel(style) {
     .join(' ');
 }
 
-function getGroupedStyle(style) {
-  const s = (style || '').toLowerCase();
-  
-  if (s.includes('pichwai') || s.includes('devotional') || s.includes('spiritual') || s.includes('shrinathji') || s.includes('krishna') || s.includes('shiva') || s.includes('ganesha') || s.includes('buddha') || s.includes('tridevi') || s.includes('gods')) {
-    return 'devotional & pichwai';
-  }
-  
-  if (s.includes('wildlife') || s.includes('animal') || s.includes('horse') || s.includes('peacock') || s.includes('panther') || s.includes('stallion') || s.includes('toucan') || s.includes('flamingo') || s.includes('leopard') || s.includes('bird') || s.includes('koi') || s.includes('crane')) {
-    return 'wildlife & animals';
-  }
-  
-  if (s.includes('floral') || s.includes('botanical') || s.includes('flower') || s.includes('lotus') || s.includes('lily') || s.includes('rose') || s.includes('lavender') || s.includes('leaves') || s.includes('monstera') || s.includes('hibiscus')) {
-    return 'florals & botanical';
-  }
-
-  if (s.includes('landscape') || s.includes('seascape') || s.includes('mountain') || s.includes('river') || s.includes('valley') || s.includes('alpine') || s.includes('sunrise') || s.includes('ocean') || s.includes('wave') || s.includes('harbour') || s.includes('cove') || s.includes('beach') || s.includes('waterfall') || s.includes('village') || s.includes('nature') || s.includes('lake') || s.includes('forest') || s.includes('pine') || s.includes('canyon') || s.includes('bosphorus')) {
-    return 'landscapes & nature';
-  }
-  
-  if (s.includes('mural') || s.includes('folk') || s.includes('decorative') || s.includes('mandala') || s.includes('mughal') || s.includes('chinoiserie') || s.includes('tapestry') || s.includes('lattice') || s.includes('sitar') || s.includes('rajasthani')) {
-    return 'murals & folk art';
-  }
-  
-  if (s.includes('abstract') || s.includes('modern') || s.includes('contemporary') || s.includes('geometric') || s.includes('expressionist') || s.includes('figurative') || s.includes('african') || s.includes('portrait')) {
-    return 'abstract & modern';
-  }
-  
-  return 'abstract & modern'; // default fallback
-}
-
 function getUniqueStyles() {
-  return [
-    'devotional & pichwai',
-    'wildlife & animals',
-    'landscapes & nature',
-    'abstract & modern',
-    'murals & folk art',
-    'florals & botanical'
-  ];
+  const defaults = ['abstract','portrait','landscape','floral','geometric','nature','animals','gods','devotional','yoga','modern','wildlife','mural'];
+  const dbStyles = store.paintings.map(p => (p.style || '').toLowerCase().trim()).filter(Boolean);
+  const combined = [...new Set([...defaults, ...dbStyles])];
+  return combined.sort();
 }
 
 function renderStyleFilters() {
@@ -1469,7 +1435,7 @@ function applyFilters() {
   const sort = document.getElementById('sort-select').value;
 
   let results = store.paintings.filter(p => {
-    if (styles.length && !styles.includes(getGroupedStyle(p.style))) return false;
+    if (styles.length && !styles.includes((p.style || '').toLowerCase().trim())) return false;
     if (moods.length && !moods.includes(p.mood)) return false;
     if (sizes.length && !sizes.includes(p.size)) return false;
     if (selectedColors.length && !selectedColors.includes(p.color)) return false;
