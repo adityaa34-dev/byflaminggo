@@ -757,20 +757,16 @@
   <!-- Hero Slider -->
   <div class="hero-slider-container" id="home-slider"></div>
 
-  <!-- Style Tabs -->
+  <!-- Style Tabs (Browse by Style) -->
   <section class="section">
     <p class="section-label">Browse by style</p>
     <h2 class="section-title">Browse by Style</h2>
     <p style="font-size: 13px; color: var(--gray); text-align: center; margin-top: -30px; margin-bottom: 30px;">Select multiple styles to narrow down paintings (combines selected choices)</p>
     <div class="style-tabs" id="style-tabs" style="margin-bottom: 40px;"></div>
     <div class="paintings-grid" id="home-style-grid"></div>
-  </section>
-
-  <!-- Featured -->
-  <section class="section" style="padding-top:0">
-    <p class="section-label">Curated picks</p>
-    <h2 class="section-title">Featured Works</h2>
-    <div class="paintings-grid" id="home-featured"></div>
+    <div id="home-see-more-container" style="text-align: center; margin-top: 48px;">
+      <button class="btn-outline" id="home-see-more-btn" onclick="expandHomeGallery()" style="margin: 0;">See More</button>
+    </div>
   </section>
 
   <!-- How It Works -->
@@ -793,6 +789,26 @@
         <h3>Contact Us on WhatsApp</h3>
         <p>Send us a message and we'll handle pricing, sizing and delivery personally.</p>
       </div>
+    </div>
+  </section>
+
+  <!-- Featured Works (curated picks) -->
+  <section class="section">
+    <p class="section-label">Curated picks</p>
+    <h2 class="section-title">Featured Works</h2>
+    <div class="paintings-grid" id="home-featured"></div>
+  </section>
+
+  <!-- Original Call-to-Action / Hero Section restored at the bottom -->
+  <section class="hero" style="border-top: 0.5px solid var(--border);">
+    <div class="hero-bg-text">ART</div>
+    <div class="hero-content">
+      <img src="byflaminggo.jpg" alt="Byflaminggo Logo" class="logo-img-hero" style="height: 60px; width: auto; object-fit: contain; margin-bottom: 20px; border-radius: 50%;">
+      <p class="hero-eyebrow">Byflaminggo — Elegance in Every Step</p>
+      <h1 class="hero-title">Art that <em>speaks</em><br>to your walls</h1>
+      <p class="hero-sub">Curated paintings and portraits delivered to your home. Browse, fall in love, and reach out — we'll do the rest.</p>
+      <a class="btn-primary" onclick="showPage('catalogue')">Browse Collection</a>
+      <a class="btn-outline" onclick="showPage('contact')" style="margin-left: 16px;">Get in Touch</a>
     </div>
   </section>
 </div>
@@ -1305,6 +1321,12 @@ function getUniqueStyleTags() {
 }
 
 let selectedHomeTags = [];
+let homeGalleryExpanded = false;
+
+function expandHomeGallery() {
+  homeGalleryExpanded = true;
+  renderHomeGrid();
+}
 
 function toggleHomeTag(tag) {
   const idx = selectedHomeTags.indexOf(tag);
@@ -1317,6 +1339,9 @@ function toggleHomeTag(tag) {
       return;
     }
     selectedHomeTags.push(tag);
+  }
+  if (selectedHomeTags.length === 0) {
+    homeGalleryExpanded = false;
   }
   renderHomeTabs();
   renderHomeGrid();
@@ -1342,12 +1367,26 @@ function renderHomeGrid() {
   if (!grid) return;
   
   let results = store.paintings;
-  if (selectedHomeTags.length > 0) {
+  const hasSelectedTags = selectedHomeTags.length > 0;
+  
+  if (hasSelectedTags) {
     results = store.paintings.filter(p => {
       const pTags = getPaintingTags(p);
       // Every selected tag must be included in the painting's tags (AND filter)
       return selectedHomeTags.every(t => pTags.includes(t));
     });
+  }
+  
+  const seeMoreContainer = document.getElementById('home-see-more-container');
+  if (hasSelectedTags) {
+    if (seeMoreContainer) seeMoreContainer.style.display = 'none';
+  } else {
+    if (homeGalleryExpanded) {
+      if (seeMoreContainer) seeMoreContainer.style.display = 'none';
+    } else {
+      results = results.slice(0, 8);
+      if (seeMoreContainer) seeMoreContainer.style.display = 'block';
+    }
   }
   
   if (results.length === 0) {
@@ -1418,10 +1457,10 @@ function renderHome() {
   renderHomeTabs();
   renderHomeGrid();
 
-  // 3. Render Featured Works (limit to first 4 featured works)
+  // 3. Render Featured Works (show all featured works dynamically)
   const featuredGrid = document.getElementById('home-featured');
   if (featuredGrid) {
-    const featured = store.paintings.filter(p => p.featured).slice(0, 4);
+    const featured = store.paintings.filter(p => p.featured);
     featuredGrid.innerHTML = featured.map(p => paintingCard(p)).join('');
   }
 }
@@ -1891,6 +1930,7 @@ async function savePaintingForm() {
       
       cancelEditMode(); // clear form
       updateStyleSuggestions();
+      renderHome();
       alert(`"${savedP.name}" added to the collection!`);
     } catch (error) {
       console.error(error);
@@ -1932,6 +1972,7 @@ async function savePaintingForm() {
       cancelEditMode(); // clear and reset form
       updateStyleSuggestions();
       renderAdminList();
+      renderHome();
       alert('Painting updated successfully!');
     } catch (error) {
       console.error(error);
@@ -1955,6 +1996,7 @@ async function deletePainting(id) {
 
     store.paintings = store.paintings.filter(x => x.id !== id);
     renderAdminList();
+    renderHome();
     alert('Painting removed!');
   } catch (error) {
     console.error(error);
@@ -2008,6 +2050,17 @@ async function saveSettings() {
 
     if (!res.ok) throw new Error('Failed to save settings');
     store.settings = await res.json();
+
+    // Dynamically update the bottom hero elements in real-time
+    const s = store.settings;
+    const heroTitleEl = document.querySelector('.hero-title');
+    if (heroTitleEl) {
+      heroTitleEl.innerHTML = (s.heroTitle || "Art that speaks\nto your walls").replace(/\n/g, '<br>');
+    }
+    const heroSubEl = document.querySelector('.hero-sub');
+    if (heroSubEl) {
+      heroSubEl.textContent = s.heroSub || '';
+    }
 
     alert('Settings saved! Changes are live on the site.');
   } catch (error) {
